@@ -1,6 +1,7 @@
 package com.example.selfmadekid;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,7 +16,7 @@ import com.example.selfmadekid.select_role_tabs.TabChild;
 import com.example.selfmadekid.select_role_tabs.TabParent;
 import com.google.android.material.tabs.TabLayout;
 
-public class LoginSelectRoleActivity extends AppCompatActivity implements TabParent.OnFragmentInteractionListener, TabChild.OnFragmentInteractionListener {
+public class SelectRoleActivity extends AppCompatActivity implements TabParent.OnFragmentInteractionListener, TabChild.OnFragmentInteractionListener {
 
     private TextView mTextMessage;
 
@@ -23,7 +24,7 @@ public class LoginSelectRoleActivity extends AppCompatActivity implements TabPar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_select_parent_or_child_activity);
+        setContentView(R.layout.role_select_activity);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_select_role);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.parent));
@@ -64,6 +65,9 @@ public class LoginSelectRoleActivity extends AppCompatActivity implements TabPar
 
     public void onParentButtonPressed(View view){
         System.out.println("onParentButtonPressed");
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void onChildButtonPressed(View view){

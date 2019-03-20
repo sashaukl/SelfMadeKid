@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".LoginActivity"
+    android:background="@color/backgroundColor">
+
+
+
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line1_activity_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08"
+        android:background="@color/cardBackground"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_last_activity_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.91" />
+
+        <androidx.cardview.widget.CardView
+
+            android:id="@+id/login_form"
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/line1_activity_login"
+            app:layout_constraintBottom_toBottomOf="@id/line_last_activity_login"
+            android:background="@drawable/card_background"
+            android:backgroundTint="@color/cardBackground"
+            android:shape="ring"
+            app:cardCornerRadius="25dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:clickable="false"
+            >
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+
+
+
+
+                    <TextView
+                        android:id="@+id/text_switcher_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:textColor="@color/textPrimaryColor"
+                        android:text="@string/action_sign_in"
+                        android:gravity="center"
+                        app:autoSizeTextType="uniform"
+                        android:paddingBottom="10dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/line2_1_activity_login"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        />
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line2_1_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.16" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line2_2_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.24" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:src="@drawable/lock"
+                        app:layout_constraintBottom_toTopOf="@id/line2_2_activity_login"
+                        app:layout_constraintTop_toTopOf="@id/line2_1_activity_login" />
+
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line3_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.27" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line4_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.35" />
+
+
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress"
+                        android:backgroundTint="@color/backgroundColor"
+                        android:maxLines="1"
+                        android:background="@drawable/card_background"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:fontFamily="sans-serif-condensed-light"
+                        app:layout_constraintTop_toTopOf="@id/line3_activity_login"
+                        app:layout_constraintBottom_toBottomOf="@id/line4_activity_login"
+                        />
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line5_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.37" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line6_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        app:layout_constraintGuide_percent="0.45" />
+
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+
+                        android:hint="@string/prompt_password"
+                        android:imeActionId="6"
+
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:background="@drawable/card_background"
+                        android:backgroundTint="@color/backgroundColor"
+                        android:maxLines="1"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintTop_toBottomOf="@id/line5_activity_login"
+                        app:layout_constraintBottom_toTopOf="@id/line6_activity_login"
+                        android:fontFamily="sans-serif-condensed-light"
+
+                        />
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line9_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.47" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line10_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        app:layout_constraintGuide_percent="0.55" />
+
+
+                    <EditText
+                        android:id="@+id/password_repeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:visibility="gone"
+                        android:hint="@string/prompt_password_repeat"
+                        android:imeActionId="6"
+                        android:imeActionLabel="@string/action_sign_up_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:background="@drawable/card_background"
+                        android:backgroundTint="@color/backgroundColor"
+                        android:maxLines="1"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintTop_toBottomOf="@id/line9_activity_login"
+                        app:layout_constraintBottom_toTopOf="@id/line10_activity_login"
+                        android:fontFamily="sans-serif-condensed-light"
+
+                        />
+
+
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line7_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.77" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line8_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.87" />
+
+                    <Button
+                        android:id="@+id/email_sign_in_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:text="@string/action_sign_in"
+                        android:onClick="attemptLogin"
+                        app:autoSizeTextType="uniform"
+                        android:textAllCaps="false"
+                        android:fontFamily="sans-serif-condensed-light"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:gravity="center"
+                        android:background="@drawable/button_background"
+                        app:layout_constraintTop_toBottomOf="@id/line7_activity_login"
+                        app:layout_constraintBottom_toTopOf="@id/line8_activity_login"
+                        />
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line11_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.89" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/line12_activity_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        app:layout_constraintGuide_percent="0.97" />
+
+                    <Button
+                        android:id="@+id/bottom_login_or_reg_button"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+
+                        android:text="@string/registration"
+
+                        android:background="@drawable/button_background"
+                        android:backgroundTint="@color/backgroundColor"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/line11_activity_login"
+                        app:layout_constraintBottom_toBottomOf="@id/line12_activity_login"
+                        android:onClick="onBottomLoginOrRegistrationPressed"
+                        />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
