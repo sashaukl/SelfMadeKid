@@ -18,19 +18,25 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        </activity>
         <activity
             android:name=".SelectRoleActivity"
             android:theme="@style/Theme.Design.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

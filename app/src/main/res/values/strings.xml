@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">SelfMadeKid</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="child_select">Выбор ребенка</string>
+    <string name="info">Подробности</string>
+    <string name="child_schedule">Рассписание</string>
+    <string name="title_notifications">Уведомления</string>
     <string name="enter_text">Войти как</string>
     <string name="parent">Родитель</string>
     <string name="child">Ребенок</string>
@@ -24,8 +25,30 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+
+    <!--logic in TaskRecyclerAdapter-->
+    <string name="task_duration_1">%1$d часов</string>
+    <string name="task_duration_2">%1$d час</string>
+    <string name="task_duration_3">%1$d часа</string>
+
+
     <string name="registration">Регистрация</string>
+
+
+    <string-array name="custom_months">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
+
+
 </resources>

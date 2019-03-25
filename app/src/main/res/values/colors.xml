@@ -8,6 +8,9 @@
     <color name="backgroundColor">#f1f1f1</color>
     <color name="textPrimaryColor">#291e1c</color>
     <color name="textSecondColor">#fff</color>
+
+    <color name="silverColor">#848d95</color>
+
     <color name="cardBackground">#83FFFFFF</color>
     <color name="transparentColor">#00000000</color>
 
