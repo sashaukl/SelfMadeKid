@@ -2,7 +2,7 @@ package com.example.selfmadekid.data;
 
 public class ChildTask implements Comparable<ChildTask>{
 
-    private int task_id;
+    private Integer task_id;
     private int hourToStartTask;
     private int minuteToStartTask;
     private int duration;
@@ -12,7 +12,7 @@ public class ChildTask implements Comparable<ChildTask>{
     private int currentProgress = 10;
 
 
-    public ChildTask(int task_id, int hourToStartTask, int minuteToStartTask, int duration, String taskText, int necessaryProgress) {
+    public ChildTask(Integer task_id, int hourToStartTask, int minuteToStartTask, int duration, String taskText, int necessaryProgress) {
         this.task_id = task_id;
         this.hourToStartTask = hourToStartTask;
         this.minuteToStartTask = minuteToStartTask;
@@ -50,6 +50,34 @@ public class ChildTask implements Comparable<ChildTask>{
         return duration;
     }
 
+
+    public void setTask_id(Integer task_id) {
+        this.task_id = task_id;
+    }
+
+    public void setHourToStartTask(int hourToStartTask) {
+        this.hourToStartTask = hourToStartTask;
+    }
+
+    public void setMinuteToStartTask(int minuteToStartTask) {
+        this.minuteToStartTask = minuteToStartTask;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setTaskText(String taskText) {
+        this.taskText = taskText;
+    }
+
+    public void setNecessaryProgress(int necessaryProgress) {
+        this.necessaryProgress = necessaryProgress;
+    }
+
+    public void setCurrentProgress(int currentProgress) {
+        this.currentProgress = currentProgress;
+    }
 
     @Override
     public int compareTo(ChildTask o) {

@@ -1,5 +1,6 @@
 package com.example.selfmadekid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import org.threeten.bp.LocalDate;
 import java.util.ArrayList;
@@ -107,4 +109,12 @@ public class MainActivity extends AppCompatActivity {
     public ChildContainer getChildContainer() {
         return childContainer;
     }
+
+
+    public void onAddButtonPressed(View view){
+        Intent intent = new Intent(this, AddNewTaskActivity.class);
+        startActivity(intent);
+        //finish();
+    }
+
 }

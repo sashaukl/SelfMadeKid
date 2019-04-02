@@ -8,15 +8,18 @@
     tools:context=".SelectRoleActivity">
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout_select_role"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tab_layout_select_role"
-        android:background="@color/colorAccent"
+        android:background="@drawable/tab_layout_background"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:popupTheme="@style/Theme.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        >
+        app:tabIndicatorColor="@color/colorPrimaryDark"
+        app:tabIndicatorFullWidth="false">
 
     </com.google.android.material.tabs.TabLayout>
 

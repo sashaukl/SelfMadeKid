@@ -6,6 +6,8 @@ import android.annotation.TargetApi;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import android.os.Build;
@@ -33,6 +35,7 @@ public class LoginActivity extends AppCompatActivity  {
 
     private boolean isRegistration = false;
 
+    private Context context;
 
     // UI references.
     private EditText mEmailView;
@@ -74,6 +77,8 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        this.context = this;
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -105,6 +110,7 @@ public class LoginActivity extends AppCompatActivity  {
         fadeOut.setDuration(300);
         fadeOut.setFillAfter(true);
         fadeOut.setAnimationListener(textChangeAnimation);
+
 
     }
 
@@ -267,6 +273,11 @@ public class LoginActivity extends AppCompatActivity  {
             showProgress(false);
 
             if (success) {
+
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
+
+
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

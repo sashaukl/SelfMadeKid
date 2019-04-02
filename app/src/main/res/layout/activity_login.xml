@@ -240,6 +240,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:text="@string/action_sign_in"
+                        android:textColor="@color/textSecondColor"
                         android:onClick="attemptLogin"
                         app:autoSizeTextType="uniform"
                         android:textAllCaps="false"

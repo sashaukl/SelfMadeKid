@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddNewTaskActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="@string/task_type"
+                    android:textColor="@color/textPrimaryColor"
+                    android:textSize="25sp"
+                    app:autoSizeTextType="uniform" />
+
+                <RadioGroup
+                    android:id="@+id/toggle"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/radio_button_background"
+                    android:checkedButton="@+id/offer"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/search"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/toggle_widget_background"
+                        android:button="@null"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="@string/one_time_task"
+                        android:textColor="@color/textPrimaryColor"
+                        android:textSize="20sp"
+                        android:onClick="onOneTimeButtonClicked"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/offer"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/toggle_widget_background"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:onClick="onRepetitiveButtonClicked"
+                        android:text="@string/repetitive_task"
+
+                        android:textColor="@color/textPrimaryColor"
+                        android:textSize="20sp" />
+                </RadioGroup>
+
+                <EditText
+                    android:id="@+id/task_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/card_background"
+                    android:backgroundTint="@color/backgroundColor"
+                    android:fontFamily="sans-serif-condensed-light"
+                    android:gravity="center"
+                    android:hint="@string/task_name"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    app:autoSizeTextType="uniform" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="@string/choose_day"
+                    android:textColor="@color/textPrimaryColor"
+
+                    android:textSize="25sp"
+                    android:visibility="gone"
+                    app:autoSizeTextType="uniform" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="@string/choose_day"
+                    android:textColor="@color/textPrimaryColor"
+                    android:textSize="25sp"
+                    android:visibility="gone"
+                    app:autoSizeTextType="uniform" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardCornerRadius="3dp"
+                    >
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/select_day_layout"
+                            android:visibility="gone">
+
+                            <com.google.android.material.checkbox.MaterialCheckBox
+                                android:tag="1"
+                                android:id="@+id/checkbox_day1"
+                                app:layout_constraintDimensionRatio="1:1"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:button="@null"
+                                android:background="@drawable/checkbox_background"
+                                android:text="@string/monday_short"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day2"
+                                android:textAlignment="center"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="2dp"
+                                android:onClick="onDayOfWeekClicked"
+                                />
+
+                            <TextView
+                                android:id="@+id/text_for_checkbox1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center"
+                                android:textColor="@color/textPrimaryColor"
+                                android:textSize="18sp"
+                                android:textAlignment="center"
+                                app:autoSizeTextType="uniform"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day2"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/checkbox_day1" />
+
+                            <com.google.android.material.checkbox.MaterialCheckBox
+                                android:tag="2"
+                                android:id="@+id/checkbox_day2"
+                                app:layout_constraintDimensionRatio="1:1"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:button="@null"
+                                android:background="@drawable/checkbox_background"
+                                android:text="@string/tuesday_short"
+                                app:layout_constraintStart_toEndOf="@id/checkbox_day1"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day3"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="2dp"
+                                android:onClick="onDayOfWeekClicked"
+                                />
+
+                            <TextView
+                                android:id="@+id/text_for_checkbox2"
+                                app:autoSizeTextType="uniform"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center"
+                                android:textSize="18sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/textPrimaryColor"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/checkbox_day1"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day3"
+                                app:layout_constraintTop_toBottomOf="@+id/checkbox_day2" />
+                            <com.google.android.material.checkbox.MaterialCheckBox
+                                android:tag="3"
+                                android:id="@+id/checkbox_day3"
+                                app:layout_constraintDimensionRatio="1:1"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="@string/wednesday_short"
+                                android:button="@null"
+                                android:background="@drawable/checkbox_background"
+                                app:layout_constraintStart_toEndOf="@id/checkbox_day2"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day4"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="2dp"
+                                android:onClick="onDayOfWeekClicked"
+                                />
+                            <TextView
+                                android:id="@+id/text_for_checkbox3"
+                                app:autoSizeTextType="uniform"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center"
+                                android:textSize="18sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/textPrimaryColor"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/checkbox_day2"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day4"
+                                app:layout_constraintTop_toBottomOf="@+id/checkbox_day4" />
+
+                            <com.google.android.material.checkbox.MaterialCheckBox
+                                android:tag="4"
+                                android:id="@+id/checkbox_day4"
+                                app:layout_constraintDimensionRatio="1:1"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:text="@string/thursday_short"
+                                android:gravity="center"
+                                android:button="@null"
+                                android:background="@drawable/checkbox_background"
+                                app:layout_constraintStart_toEndOf="@id/checkbox_day3"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day5"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="2dp"
+                                android:onClick="onDayOfWeekClicked"
+                                />
+                            <TextView
+                                android:id="@+id/text_for_checkbox4"
+                                app:autoSizeTextType="uniform"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center"
+                                android:textSize="18sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/textPrimaryColor"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/checkbox_day3"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day5"
+                                app:layout_constraintTop_toBottomOf="@+id/checkbox_day5" />
+
+                            <com.google.android.material.checkbox.MaterialCheckBox
+                                android:tag="5"
+                                android:id="@+id/checkbox_day5"
+                                app:layout_constraintDimensionRatio="1:1"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="@string/friday_short"
+                                android:button="@null"
+                                android:background="@drawable/checkbox_background"
+                                app:layout_constraintStart_toEndOf="@id/checkbox_day4"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day6"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="2dp"
+                                android:onClick="onDayOfWeekClicked"
+                                />
+
+                            <TextView
+                                android:id="@+id/text_for_checkbox5"
+                                app:autoSizeTextType="uniform"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center"
+                                android:textSize="18sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/textPrimaryColor"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/checkbox_day4"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day6"
+                                app:layout_constraintTop_toBottomOf="@+id/checkbox_day6" />
+
+                            <com.google.android.material.checkbox.MaterialCheckBox
+                                android:tag="6"
+                                android:id="@+id/checkbox_day6"
+                                app:layout_constraintDimensionRatio="1:1"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:text="@string/saturday_short"
+                                android:gravity="center"
+                                android:button="@null"
+                                android:background="@drawable/checkbox_background"
+                                app:layout_constraintStart_toEndOf="@id/checkbox_day5"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day7"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="2dp"
+                                android:onClick="onDayOfWeekClicked"
+                                />
+                            <TextView
+                                android:id="@+id/text_for_checkbox6"
+                                app:autoSizeTextType="uniform"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center"
+                                android:textSize="18sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/textPrimaryColor"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/checkbox_day5"
+                                app:layout_constraintEnd_toStartOf="@id/checkbox_day7"
+                                app:layout_constraintTop_toBottomOf="@+id/checkbox_day7" />
+                            <com.google.android.material.checkbox.MaterialCheckBox
+                                android:tag="7"
+                                android:id="@+id/checkbox_day7"
+                                app:layout_constraintDimensionRatio="1:1"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:gravity="center"
+                                android:text="@string/sunday_short"
+                                android:button="@null"
+                                android:background="@drawable/checkbox_background"
+                                app:layout_constraintStart_toEndOf="@id/checkbox_day6"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginStart="2dp"
+                                android:layout_marginEnd="2dp"
+                                android:onClick="onDayOfWeekClicked"
+                                />
+
+                            <TextView
+                                android:id="@+id/text_for_checkbox7"
+                                app:autoSizeTextType="uniform"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center"
+
+                                android:textSize="18sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/textPrimaryColor"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/checkbox_day6"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/checkbox_day7" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TimePicker
+                            android:id="@+id/time_picker"
+                            android:timePickerMode="spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/header_time_text"
+                            />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/header1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardCornerRadius="3dp"
+
+                    android:clickable="true"
+                    android:onClick="onTimeHeaderClicked"
+                    >
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp">
+
+                        <TextView
+                            android:id="@+id/header_time_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/deadline_time"
+                            android:textSize="25sp"
+                            android:layout_marginStart="20dp"
+                            android:textColor="@color/textPrimaryColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            />
+
+                        <TextView
+                            android:id="@+id/selected_time"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="5dp"
+                            android:textColor="@color/textPrimaryColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/header_time_text"
+                            app:layout_constraintStart_toEndOf="@id/header_time_text"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:gravity="end|center"
+                            />
+                        <TimePicker
+                            android:id="@+id/time_picker_one_time_task"
+                            android:timePickerMode="spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/header_time_text"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/header2"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardCornerRadius="3dp"
+                    android:clickable="true"
+                    android:onClick="onDateHeaderClicked"
+                    >
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/header_date_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/deadline_date"
+                            android:textSize="25sp"
+                            android:layout_marginStart="20dp"
+                            android:textColor="@color/textPrimaryColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            />
+                        <TextView
+                            android:id="@+id/selected_date"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="5dp"
+                            android:textColor="@color/textPrimaryColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/header_date_text"
+                            app:layout_constraintStart_toEndOf="@id/header_date_text"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:gravity="end|center"
+                            />
+
+                        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+
+                            android:id="@+id/calendar_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:mcv_monthLabels="@array/custom_months"
+
+                            app:mcv_selectionMode="single"
+                            app:mcv_weekDayLabels="@array/custom_days_of_the_week"
+
+                            tools:layout_editor_absoluteY="40dp" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/header3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardCornerRadius="3dp"
+                    android:clickable="true"
+                    android:onClick="buildAlertDialog"
+                    >
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/header_point_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/points"
+                            android:textSize="25sp"
+                            android:layout_marginStart="20dp"
+                            android:textColor="@color/textPrimaryColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            />
+                        <TextView
+                            android:id="@+id/selected_points"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="5dp"
+                            android:textColor="@color/textPrimaryColor"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/header_point_text"
+                            app:layout_constraintStart_toEndOf="@id/header_point_text"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:gravity="end|center"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_weight="0"
+                android:background="@color/transparentColor"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/add_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/button_background"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+
+                    android:text="@string/add_button"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textSecondColor"
+                    app:autoSizeTextType="uniform"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

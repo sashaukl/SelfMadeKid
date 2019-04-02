@@ -17,6 +17,11 @@
 
     <string name="prompt_password_repeat">Повторити пароль</string>
 
+
+    <string name="task_name">Название задачи</string>
+    <string name="one_time_task">Разовая</string>
+    <string name="repetitive_task">Повторяющаяся</string>
+
     <string name="action_sign_in">Вход</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_sign_up_short">Sign up</string>
@@ -24,7 +29,7 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_field_required">Это обязательное поле</string>
 
     <!--logic in TaskRecyclerAdapter-->
     <string name="task_duration_1">%1$d часов</string>
@@ -33,7 +38,12 @@
 
 
     <string name="registration">Регистрация</string>
+    <string name="task_type">Тип задачи</string>
+    <string name="choose_day">Веберите день</string>
 
+    <string name="date">Дата</string>
+    <string name="time_to_start">Время начала</string>
+    <string name="Duration">Продолжительность</string>
 
     <string-array name="custom_months">
         <item>Январь</item>
@@ -50,5 +60,32 @@
         <item>Декабрь</item>
     </string-array>
 
+    <string-array name="custom_days_of_the_week">
+        <item>пн</item>
+        <item>вт</item>
+        <item>ср</item>
+        <item>чт</item>
+        <item>пт</item>
+        <item>сб</item>
+        <item>вс</item>
+    </string-array>
+
+    <string name="monday_short">пн</string>
+    <string name="tuesday_short">вт</string>
+    <string name="wednesday_short">ср</string>
+    <string name="thursday_short">чт</string>
+    <string name="friday_short">пт</string>
+    <string name="saturday_short">cб</string>
+    <string name="sunday_short">вс</string>
+
+    <string name="display_time">%1$d:%2$02d</string>
+    <string name="display_date">%1$d.%2$02d.%3$04d</string>
+    <string name="ok">OK</string>
+    <string name="abort">Отмена</string>
+    <string name="points">Баллов</string>
+    <string name="point_count_to_end_task">Количество баллов за задание</string>
+    <string name="deadline_time">Время дедлайна</string>
+    <string name="deadline_date">Дата дедлайна</string>
+    <string name="add_button">Добавить</string>
 
 </resources>

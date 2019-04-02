@@ -1,7 +1,6 @@
 package com.example.selfmadekid.main_fragments;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,10 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.selfmadekid.AddNewTaskActivity;
+import com.example.selfmadekid.LoginActivity;
 import com.example.selfmadekid.MainActivity;
 import com.example.selfmadekid.R;
 import com.example.selfmadekid.adapters.TaskRecyclerAdapter;
-import com.example.selfmadekid.data.ChildContainer;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -61,7 +61,7 @@ public class ScheduleParent extends Fragment {
         //mCalendarView.setAccessibilityHeading(false);
 
 
-        View view = inflater.inflate(R.layout.fragment_schedudle__parent, container, false);
+        View view = inflater.inflate(R.layout.fragment_schedudle_parent, container, false);
         mCalendarView = view.findViewById(R.id.calendarView);
 
         mCalendarView.setTitleFormatter(new MonthArrayTitleFormatter(getResources().getTextArray(R.array.custom_months)));
@@ -101,5 +101,8 @@ public class ScheduleParent extends Fragment {
 
         return view;
     }
+
+
+
 
 }
