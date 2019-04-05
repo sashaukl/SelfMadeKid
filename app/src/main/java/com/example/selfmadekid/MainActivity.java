@@ -5,12 +5,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 
+import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.ChildTask;
-import com.example.selfmadekid.data.MyTaskList;
+import com.example.selfmadekid.data.OneTimeTask;
+import com.example.selfmadekid.data.RepetitiveTask;
+import com.example.selfmadekid.data.RepetitiveTasksList;
+import com.example.selfmadekid.data.TimeHolder;
 import com.example.selfmadekid.main_fragments.ScheduleParent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,13 +23,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import org.threeten.bp.LocalDate;
-import java.util.ArrayList;
+
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private ChildContainer childContainer;
+    private int selectedChildID = 0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -57,38 +62,24 @@ public class MainActivity extends AppCompatActivity {
 
         Locale locale = new Locale("RU");
         Locale.setDefault(locale);
+
         childContainer = new ChildContainer();
-
-        childContainer.getTaskContainer().put(LocalDate.now(), new MyTaskList());
-        childContainer.getTaskContainer().get(LocalDate.now()).add(new ChildTask(1,24, 0,1
-        ,"Сделать уроки", 33));
-
-        childContainer.getTaskContainer().get(LocalDate.now()).add(new ChildTask(2,23, 0,2
-                ,"Сделать уроки111", 33));
+        AppData.getChildren().put(selectedChildID, childContainer);
 
 
+        if (AppData.getChildren().get(selectedChildID) == null){
+            AppData.getChildren().put(selectedChildID, new ChildContainer());
+        }
 
-        /*
-        mCalendarView = findViewById(R.id.calendarView);
+        childContainer.getDayOfTheWeekContainer(LocalDate.now().getDayOfWeek()).add(new RepetitiveTask(1,"Сделать уроки",
+                30, 18, 32));
 
-        //mCalendarView.setAccessibilityHeading(false);
-
-        mCalendarView.setTitleFormatter(new MonthArrayTitleFormatter(getResources().getTextArray(R.array.custom_months)));
-        Calendar calendar = Calendar.getInstance();
+        childContainer.getDayOfTheWeekContainer(LocalDate.now().getDayOfWeek()).add(new RepetitiveTask(2,"Сделать уроки12",
+               50, 16, 58 ));
 
 
-        Calendar now = Calendar.getInstance();
+        childContainer.getOneTimeTaskContainer().add(new OneTimeTask(3, "Проект", LocalDate.now(), 23, 24));
 
-        //only way why its works :(
-        CalendarDay today = CalendarDay.today();
-        int year = today.getYear();
-        int month = today.getMonth();
-        int day = today.getDay();
-
-        mCalendarView.setCurrentDate(CalendarDay.from(year, month, day) , true);
-        mCalendarView.setSelectedDate(LocalDate.now());
-
-*/
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -113,8 +104,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onAddButtonPressed(View view){
         Intent intent = new Intent(this, AddNewTaskActivity.class);
+        intent.putExtra("id", selectedChildID);
         startActivity(intent);
         //finish();
     }
 
+    public int getSelectedChildID() {
+        return selectedChildID;
+    }
 }

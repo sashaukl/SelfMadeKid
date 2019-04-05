@@ -1,11 +1,7 @@
 package com.example.selfmadekid.adapters;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.Point;
 
 import androidx.recyclerview.widget.RecyclerView;
 import android.graphics.drawable.Drawable;
@@ -15,7 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.example.selfmadekid.R;
+import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildTask;
+import com.example.selfmadekid.data.OneTimeTask;
+import com.example.selfmadekid.data.RepetitiveTask;
+
+import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 
@@ -27,15 +29,27 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     private ItemClickListener mClickListener;
 
     private Context context;
-    private ArrayList<ChildTask> container;
+    private ArrayList<RepetitiveTask> container;
 
     private final int TYPE_HEADER = 0;
     private final int TYPE_ITEM = 1;
 
+    private final int ONE_TIME_TYPE_ITEM = 2;
+    private final int ONE_TIME_TYPE_HEADER = 3;
+    private int selectedChildId;
+
+    private int repetitiveSize;
+    private int oneTimeSize;
+
+    private int dayOfTheWeek;
+
+
 
     // data is passed into the constructor
-    public TaskRecyclerAdapter(Context context, ArrayList<ChildTask> arrayList) {
+    public TaskRecyclerAdapter(Context context, DayOfWeek dayOfTheWeek, ArrayList<RepetitiveTask> arrayList, int selectedChildID) {
         this.context = context;
+        this.selectedChildId = selectedChildID;
+        this.dayOfTheWeek = dayOfTheWeek.getValue();
         this.mInflater = LayoutInflater.from(context);
         this.container = arrayList;
     }
@@ -44,16 +58,22 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-
         System.out.println(viewType);
         switch (viewType) {
             case TYPE_HEADER:
                 v = mInflater.inflate(R.layout.header_schedule, parent, false);
                 break;
+            case ONE_TIME_TYPE_HEADER:
+                v = mInflater.inflate(R.layout.header_one_time_task, parent, false);
+                break;
+            case ONE_TIME_TYPE_ITEM:
+                v = mInflater.inflate(R.layout.one_time_task_item, parent, false);
+                break;
+            case TYPE_ITEM:
             default:
                 v = mInflater.inflate(R.layout.child_item, parent, false);
+                break;
         }
-
         return new ViewHolder(v);
     }
 
@@ -64,34 +84,28 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
 
         int type = getItemViewType(position);
         System.out.println(holder.mHeaderText);
+        ChildTask childTask;
         switch (type) {
-
             case TYPE_HEADER:
-                String str = container.get(position).getHourToStartTask() + ":00";
+                //TimeHolder timeHolder = container.get(position).getTimeHolders(dayOfTheWeek);
+                String str = container.get(position).getStartHour() + ":00";
                 holder.mHeaderText.setText(str) ;
-
             case TYPE_ITEM:
-                ChildTask childTask = getItem(position);
+                childTask = getItem(position);
                 holder.child_item_text.setText(childTask.getTaskText());
-                //holder.progressBar.
-                //Resources res = context.getResources();
                 Drawable drawable = context.getDrawable(R.drawable.progress_bar_circle);
-                holder.progressBar.setSecondaryProgress(childTask.getNecessaryProgress()); // Secondary Progress
                 holder.progressBar.setMax(childTask.getNecessaryProgress()); // Maximum Progress
+                holder.progressBar.setSecondaryProgress(childTask.getNecessaryProgress()); // Secondary Progress
                 holder.progressBar.setProgressDrawable(drawable);
                 holder.progressBar.setProgress(getItem(position).getCurrentProgress());
                 holder.mProgressText.setText(childTask.getCurrentProgress() + "/" + childTask.getNecessaryProgress());
-                int duration = childTask.getDuration();
-                if (duration%10 == 1){
-                    if (duration%100!=11){
-                        holder.mDuration.setText(context.getString(R.string.task_duration_2, duration));
-                    }
-                }else if(duration%10>=2 && duration%10<=4){
-                    holder.mDuration.setText(context.getString(R.string.task_duration_3, duration));
-                }else{
-                    holder.mDuration.setText(context.getString(R.string.task_duration_1, duration));
-                }
-
+                break;
+            case ONE_TIME_TYPE_HEADER:
+            case ONE_TIME_TYPE_ITEM:
+                childTask = getItem(position);
+                holder.child_item_text.setText(childTask.getTaskText());
+                LocalDate date = ((OneTimeTask) getItem(position)).getDeadlineDate();
+                holder.mUntilDate.setText(context.getString(R.string.do_until_date, date.getDayOfMonth(),date.getMonthValue(),date.getYear() ));
                 break;
         }
     }
@@ -99,11 +113,20 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     // total number of rows
     @Override
     public int getItemCount() {
+        int size = 0;
         if (container != null ){
-            return container.size();
+            repetitiveSize = container.size();
+            size += repetitiveSize;
         }else{
-            return 0;
+            repetitiveSize = 0;
         }
+        if (AppData.getChildren().get(selectedChildId)!= null){
+            oneTimeSize = AppData.getChildren().get(selectedChildId).getOneTimeTaskContainer().size();
+            size += oneTimeSize;
+        }else {
+            oneTimeSize = 0;
+        }
+        return size;
     }
 
 
@@ -111,7 +134,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView child_item_text;
         TextView mHeaderText;
-        TextView mDuration;
+        TextView mUntilDate;
         ProgressBar progressBar;
         TextView mProgressText;
 
@@ -120,7 +143,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
             mHeaderText = itemView.findViewById(R.id.header_schedule_text);
             child_item_text = itemView.findViewById(R.id.child_item_text);
             progressBar = itemView.findViewById(R.id.child_progress_bar);
-            mDuration = itemView.findViewById(R.id.child_item_duration);
+            mUntilDate = itemView.findViewById(R.id.child_item_until_date);
             mProgressText = itemView.findViewById(R.id.progress_text);
         }
 
@@ -132,28 +155,52 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
 
     // convenience method for getting data at click position
     ChildTask getItem(int id) {
-        if (container!=null){
-            return container.get(id);
+        if (id<repetitiveSize)
+        {
+            if (container!=null){
+                return container.get(id);
+            }
         }
+        else {
+            return AppData.getChildren().get(selectedChildId).getOneTimeTaskContainer().get(id-repetitiveSize);
+        }
+
         return null;
     }
 
 
     @Override
     public int getItemViewType(int position) {
+        if (position < repetitiveSize) {
+            if (container!=null) {
+                if (!(position == 0) && (container.get(position).getStartHour()) == container.get(position - 1).getStartHour()) {
+                    return TYPE_ITEM;
+                }else{
+                    return TYPE_HEADER;
+                }
+            }
+        }
+        if (position == repetitiveSize){
+            return ONE_TIME_TYPE_HEADER;
+        }
 
-        if (isIdentType(position)) return TYPE_ITEM;
-            return TYPE_HEADER;
+        return ONE_TIME_TYPE_ITEM;
     }
 
     private boolean isIdentType (int position ){
 
         if (container!=null) {
-            if (!(position == 0) && (container.get(position).getHourToStartTask()) == (container.get(position - 1).getHourToStartTask())) {
-                return true;
-            }
+            //TimeHolder timeHolder = container.get(position).getTimeHolders(dayOfTheWeek);
+            //TimeHolder prevTime = container.get(position).getTimeHolders(dayOfTheWeek);
+            //if (timeHolder != null){
+                if (!(position == 0) && (container.get(position).getStartHour()) == container.get(position - 1).getStartHour()) {
+                    return true;
+                }
+            //}
         }
+
         return false;
+
     }
 
 

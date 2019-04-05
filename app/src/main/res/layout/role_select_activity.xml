@@ -11,14 +11,14 @@
         android:id="@+id/tab_layout_select_role"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/tab_layout_background"
+        android:background="@color/colorAccent"
         android:minHeight="?attr/actionBarSize"
         android:popupTheme="@style/Theme.AppCompat.Light"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/colorPrimaryDark"
+        app:tabIndicatorColor="@color/colorAccent"
         app:tabIndicatorFullWidth="false">
 
     </com.google.android.material.tabs.TabLayout>

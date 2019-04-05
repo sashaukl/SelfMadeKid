@@ -84,7 +84,7 @@ public class ScheduleParent extends Fragment {
                 //todo fine listener
                 LocalDate localDate = calendarDay.getDate();
 
-                adapter = new TaskRecyclerAdapter(getContext(), ((MainActivity) getContext()).getChildContainer().getTaskContainer().get(localDate));
+                adapter = new TaskRecyclerAdapter(getContext(), localDate.getDayOfWeek(), ((MainActivity) getContext()).getChildContainer().getDayOfTheWeekContainer(localDate.getDayOfWeek()), ((MainActivity) getContext()).getSelectedChildID());
                 recyclerView.setAdapter(adapter);
 
                 System.out.println(localDate);
@@ -95,7 +95,7 @@ public class ScheduleParent extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new TaskRecyclerAdapter(getContext(), ((MainActivity) getContext()).getChildContainer().getTaskContainer().get(LocalDate.now()));
+        adapter = new TaskRecyclerAdapter(getContext(), LocalDate.now().getDayOfWeek() ,((MainActivity) getContext()).getChildContainer().getDayOfTheWeekContainer(LocalDate.now().getDayOfWeek()), ((MainActivity) getContext()).getSelectedChildID() );
         recyclerView.setAdapter(adapter);
 
 

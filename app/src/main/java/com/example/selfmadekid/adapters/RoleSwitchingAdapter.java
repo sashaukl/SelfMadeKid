@@ -29,7 +29,6 @@ public class RoleSwitchingAdapter extends FragmentStatePagerAdapter {
                 return tabChild;
 
         }
-
         return null;
     }
 

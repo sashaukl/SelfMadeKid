@@ -391,7 +391,7 @@
                                 app:layout_constraintTop_toBottomOf="@+id/checkbox_day7" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                         <TimePicker
-                            android:id="@+id/time_picker"
+                            android:id="@+id/time_picker_for_repetitive"
                             android:timePickerMode="spinner"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -506,7 +506,7 @@
                             />
 
                         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-
+                            app:layout_constraintTop_toBottomOf="@id/selected_date"
                             android:id="@+id/calendar_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -576,16 +576,20 @@
                     android:id="@+id/add_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="4dp"
                     android:background="@drawable/button_background"
                     android:fontFamily="sans-serif-light"
                     android:gravity="center"
-
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:text="@string/add_button"
                     android:textAllCaps="false"
                     android:textColor="@color/textSecondColor"
                     app:autoSizeTextType="uniform"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:onClick="onAddButtonClicked"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.LinearLayoutCompat>

@@ -87,5 +87,11 @@
     <string name="deadline_time">Время дедлайна</string>
     <string name="deadline_date">Дата дедлайна</string>
     <string name="add_button">Добавить</string>
+    <string name="choose_at_least_one_day">Выберете хотя бы один день</string>
+    <string name="enter_points_amount">Введите количство баллов</string>
+    <string name="one_time_tasks">Разовые задачи</string>
+    <string name="do_until_date">До %1$d.%2$02d.%3$04d</string>
+    <string name="enter_deadline_time_and_date">Выберете дату и время дедлайна</string>
+    <string name="enter_date_after_now">Выберете дату позднее настоящей</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package com.example.selfmadekid.data;
 
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
@@ -14,10 +13,26 @@ public class ChildContainer {
     private String patronymic;
 
 
-    private HashMap<LocalDate, MyTaskList> taskContainer = new HashMap<>();
+    private HashMap<DayOfWeek, RepetitiveTasksList > repetitiveTaskContainer =
+        new HashMap<DayOfWeek, RepetitiveTasksList>() {{
+            put(DayOfWeek.MONDAY, new RepetitiveTasksList());
+            put(DayOfWeek.TUESDAY, new  RepetitiveTasksList());
+            put(DayOfWeek.WEDNESDAY, new RepetitiveTasksList());
+            put(DayOfWeek.THURSDAY, new RepetitiveTasksList());
+            put(DayOfWeek.FRIDAY, new RepetitiveTasksList());
+            put(DayOfWeek.SATURDAY, new RepetitiveTasksList());
+            put(DayOfWeek.SUNDAY, new RepetitiveTasksList());
+        }};
+
+    private OneTimeTaskList oneTimeTaskContainer = new OneTimeTaskList();
 
 
-    public HashMap<LocalDate, MyTaskList> getTaskContainer() {
-        return taskContainer;
+    public OneTimeTaskList getOneTimeTaskContainer() {
+        return oneTimeTaskContainer;
     }
+
+    public RepetitiveTasksList getDayOfTheWeekContainer(DayOfWeek dayOfWeek){
+        return repetitiveTaskContainer.get(dayOfWeek);
+    }
+
 }

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/time_picker">
+    android:id="@+id/time_picker_for_repetitive">
 
     <TimePicker
         android:id="@+id/add_new_item_time_picker"

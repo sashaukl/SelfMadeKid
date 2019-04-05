@@ -4,21 +4,22 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class MyTaskList extends ArrayList<ChildTask>{
+public class RepetitiveTasksList extends ArrayList<RepetitiveTask>{
 
 
 
     @Override
-    public boolean add(ChildTask o) {
+    public boolean add(RepetitiveTask o) {
         boolean b = super.add(o);
         sort(new MyComparator());
         return b;
     }
 
-    public class MyComparator implements Comparator<ChildTask>
+    public class MyComparator implements Comparator<RepetitiveTask>
     {
-        public int compare(ChildTask o1, ChildTask o2) {
+        public int compare(RepetitiveTask o1, RepetitiveTask o2) {
             return o1.compareTo(o2);
         }
     }
+
 }
