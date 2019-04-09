@@ -4,8 +4,7 @@ public abstract class ChildTask  {
 
     protected Integer task_id;
     protected String taskText;
-    protected int necessaryProgress;
-    protected int currentProgress = 0;
+    protected int finishReward;
 
     public Integer getTask_id() {
         return task_id;
@@ -23,19 +22,13 @@ public abstract class ChildTask  {
         this.taskText = taskText;
     }
 
-    public int getNecessaryProgress() {
-        return necessaryProgress;
+    public int getFinishReward() {
+        return finishReward;
     }
 
-    public void setNecessaryProgress(int necessaryProgress) {
-        this.necessaryProgress = necessaryProgress;
+    public void setFinishReward(int finishReward) {
+        this.finishReward = finishReward;
     }
 
-    public int getCurrentProgress() {
-        return currentProgress;
-    }
 
-    public void setCurrentProgress(int currentProgress) {
-        this.currentProgress = currentProgress;
-    }
 }

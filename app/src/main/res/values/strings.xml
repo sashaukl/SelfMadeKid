@@ -15,7 +15,7 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Пароль</string>
 
-    <string name="prompt_password_repeat">Повторити пароль</string>
+    <string name="prompt_password_repeat">Повторите пароль</string>
 
 
     <string name="task_name">Название задачи</string>
@@ -30,7 +30,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">Это обязательное поле</string>
-
+    <string name="passwords_must_be_the_same">Пароли не совпадают</string>
     <!--logic in TaskRecyclerAdapter-->
     <string name="task_duration_1">%1$d часов</string>
     <string name="task_duration_2">%1$d час</string>
@@ -93,5 +93,20 @@
     <string name="do_until_date">До %1$d.%2$02d.%3$04d</string>
     <string name="enter_deadline_time_and_date">Выберете дату и время дедлайна</string>
     <string name="enter_date_after_now">Выберете дату позднее настоящей</string>
+    <string name="add_goal">Добавить цель</string>
+    <string name="goal_progress_bar_as_text">%1$d/%2$d</string>
+    <string name="add_new_child">Добавить нового ребенка</string>
+    <string name="first_name">Имя</string>
+    <string name="second_name">Фамилия</string>
+    <string name="patronymic">Отчество</string>
+
+
+    <string name="register_script">http://10.0.2.2/myselfkid/register.php</string>
+    <string name="login_script">http://10.0.2.2/myselfkid/login.php</string>
+    <string name="add_child_script">http://10.0.2.2/myselfkid/add_child.php</string>
+    <string name="get_children_script">http://10.0.2.2/myselfkid/getchildren.php</string>
+    <string name="get_child_data">http://10.0.2.2/myselfkid/get_child_data.php</string>
+
+
 
 </resources>

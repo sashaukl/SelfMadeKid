@@ -13,8 +13,11 @@ import android.widget.TextView;
 import com.example.selfmadekid.R;
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildTask;
+import com.example.selfmadekid.data.Goal;
 import com.example.selfmadekid.data.OneTimeTask;
+import com.example.selfmadekid.data.OneTimeTaskList;
 import com.example.selfmadekid.data.RepetitiveTask;
+import com.example.selfmadekid.data.RepetitiveTasksList;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
@@ -29,29 +32,35 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     private ItemClickListener mClickListener;
 
     private Context context;
-    private ArrayList<RepetitiveTask> container;
+
+
+    private RepetitiveTasksList repetitiveTasks;
+    private OneTimeTaskList oneTimeTasks;
+
 
     private final int TYPE_HEADER = 0;
     private final int TYPE_ITEM = 1;
 
     private final int ONE_TIME_TYPE_ITEM = 2;
     private final int ONE_TIME_TYPE_HEADER = 3;
+
     private int selectedChildId;
-
-    private int repetitiveSize;
-    private int oneTimeSize;
-
-    private int dayOfTheWeek;
+    private int repetitiveSize = 0;
+    private int oneTimeSize = 0;
+    private DayOfWeek dayOfTheWeek;
 
 
 
     // data is passed into the constructor
-    public TaskRecyclerAdapter(Context context, DayOfWeek dayOfTheWeek, ArrayList<RepetitiveTask> arrayList, int selectedChildID) {
+    public TaskRecyclerAdapter(Context context, Goal goal, int selectedChildID, DayOfWeek dayOfTheWeek ) {
         this.context = context;
         this.selectedChildId = selectedChildID;
-        this.dayOfTheWeek = dayOfTheWeek.getValue();
         this.mInflater = LayoutInflater.from(context);
-        this.container = arrayList;
+        this.dayOfTheWeek = dayOfTheWeek;
+        if (goal != null){
+            oneTimeTasks = goal.getOneTimeTaskContainer();
+            repetitiveTasks =  goal.getDayOfTheWeekContainer(dayOfTheWeek);
+        }
     }
 
     // inflates the row layout from xml when needed
@@ -87,18 +96,17 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
         ChildTask childTask;
         switch (type) {
             case TYPE_HEADER:
-                //TimeHolder timeHolder = container.get(position).getTimeHolders(dayOfTheWeek);
-                String str = container.get(position).getStartHour() + ":00";
+                String str = repetitiveTasks.get(position).getStartHour() + ":00";
                 holder.mHeaderText.setText(str) ;
             case TYPE_ITEM:
                 childTask = getItem(position);
                 holder.child_item_text.setText(childTask.getTaskText());
                 Drawable drawable = context.getDrawable(R.drawable.progress_bar_circle);
-                holder.progressBar.setMax(childTask.getNecessaryProgress()); // Maximum Progress
-                holder.progressBar.setSecondaryProgress(childTask.getNecessaryProgress()); // Secondary Progress
+                holder.progressBar.setMax(childTask.getFinishReward()); // Maximum Progress
+                holder.progressBar.setSecondaryProgress(childTask.getFinishReward()); // Secondary Progress
                 holder.progressBar.setProgressDrawable(drawable);
-                holder.progressBar.setProgress(getItem(position).getCurrentProgress());
-                holder.mProgressText.setText(childTask.getCurrentProgress() + "/" + childTask.getNecessaryProgress());
+                //holder.progressBar.setProgress(getItem(position).getCurrentProgress());
+                //holder.mProgressText.setText(childTask.getCurrentProgress() + "/" + childTask.getFinishReward());
                 break;
             case ONE_TIME_TYPE_HEADER:
             case ONE_TIME_TYPE_ITEM:
@@ -114,14 +122,14 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     @Override
     public int getItemCount() {
         int size = 0;
-        if (container != null ){
-            repetitiveSize = container.size();
+        if (repetitiveTasks != null ){
+            repetitiveSize = repetitiveTasks.size();
             size += repetitiveSize;
         }else{
             repetitiveSize = 0;
         }
-        if (AppData.getChildren().get(selectedChildId)!= null){
-            oneTimeSize = AppData.getChildren().get(selectedChildId).getOneTimeTaskContainer().size();
+        if (oneTimeTasks != null){
+            oneTimeSize = oneTimeTasks.size();
             size += oneTimeSize;
         }else {
             oneTimeSize = 0;
@@ -157,12 +165,12 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     ChildTask getItem(int id) {
         if (id<repetitiveSize)
         {
-            if (container!=null){
-                return container.get(id);
+            if (repetitiveTasks !=null){
+                return repetitiveTasks.get(id);
             }
         }
         else {
-            return AppData.getChildren().get(selectedChildId).getOneTimeTaskContainer().get(id-repetitiveSize);
+            return oneTimeTasks.get(id-repetitiveSize);
         }
 
         return null;
@@ -172,8 +180,8 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     @Override
     public int getItemViewType(int position) {
         if (position < repetitiveSize) {
-            if (container!=null) {
-                if (!(position == 0) && (container.get(position).getStartHour()) == container.get(position - 1).getStartHour()) {
+            if (repetitiveTasks !=null) {
+                if (!(position == 0) && (repetitiveTasks.get(position).getStartHour()) == repetitiveTasks.get(position - 1).getStartHour()) {
                     return TYPE_ITEM;
                 }else{
                     return TYPE_HEADER;
@@ -189,11 +197,11 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
 
     private boolean isIdentType (int position ){
 
-        if (container!=null) {
-            //TimeHolder timeHolder = container.get(position).getTimeHolders(dayOfTheWeek);
-            //TimeHolder prevTime = container.get(position).getTimeHolders(dayOfTheWeek);
+        if (repetitiveTasks !=null) {
+            //TimeHolder timeHolder = repetitiveContainer.get(position).getTimeHolders(dayOfTheWeek);
+            //TimeHolder prevTime = repetitiveContainer.get(position).getTimeHolders(dayOfTheWeek);
             //if (timeHolder != null){
-                if (!(position == 0) && (container.get(position).getStartHour()) == container.get(position - 1).getStartHour()) {
+                if (!(position == 0) && (repetitiveTasks.get(position).getStartHour()) == repetitiveTasks.get(position - 1).getStartHour()) {
                     return true;
                 }
             //}

@@ -16,8 +16,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.selfmadekid.data.AppData;
+import com.example.selfmadekid.data.Goal;
 import com.example.selfmadekid.data.OneTimeTask;
+import com.example.selfmadekid.data.OneTimeTaskList;
 import com.example.selfmadekid.data.RepetitiveTask;
+import com.example.selfmadekid.data.RepetitiveTasksList;
 import com.example.selfmadekid.data.TimeHolder;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -27,9 +30,7 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.Date;
 
 public class AddNewTaskActivity extends AppCompatActivity {
 
@@ -68,9 +69,12 @@ public class AddNewTaskActivity extends AppCompatActivity {
     private LocalDate deadline_date;
     private final int WEEK_LENGTH = 7;
 
+    private Goal goal;
     //repetitive_task
     private TimeHolder[] week_days = new TimeHolder[WEEK_LENGTH];
 
+    private RepetitiveTasksList repetitiveTasks;
+    private OneTimeTaskList oneTimeTasks;
 
 
 
@@ -79,9 +83,25 @@ public class AddNewTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_task);
 
-        selectedChildID = getIntent().getIntExtra("id", 0);
+        selectedChildID = getIntent().getIntExtra("id", -1);
 
         mNameField = ((TextView) findViewById(R.id.task_name));
+
+        if (selectedChildID!= -1){
+            if (AppData.getChildren().get(selectedChildID) != null) {
+
+                goal = AppData.getChildren().get(selectedChildID).getCurrentGoal();
+                if (goal != null) {
+                    oneTimeTasks = goal.getOneTimeTaskContainer();
+                } else {
+                    //todo error text
+                    errorMessage();
+                }
+            }
+        }else{
+            //todo error text
+            errorMessage();
+        }
 
         mTimePicker = findViewById(R.id.time_picker_for_repetitive);
         if (mTimePicker !=null){
@@ -261,16 +281,17 @@ public class AddNewTaskActivity extends AppCompatActivity {
                 timeHolder = week_days[i];
                 if (timeHolder!=null){
                     //todo -- get task id from server
+                    if ( goal!= null){
+                        goal.getDayOfTheWeekContainer(DayOfWeek.of(i+1)).add(new RepetitiveTask(
+                                //generated task id
+                                2,
+                                task_name,
+                                max_points,
+                                timeHolder.getHour(),
+                                timeHolder.getHour()
 
-                    AppData.getChildren().get(selectedChildID).getDayOfTheWeekContainer(DayOfWeek.of(i+1)).add(new RepetitiveTask(
-                            //generated task id
-                            2,
-                            task_name,
-                            max_points,
-                            timeHolder.getHour(),
-                            timeHolder.getHour()
-
-                    ));
+                        ));
+                    }
                     isTyped = true;
                 }
             }
@@ -294,22 +315,30 @@ public class AddNewTaskActivity extends AppCompatActivity {
             long timeSetted = deadline_hour * 3600000 +deadline_minute*60000;
             if (deadline_date.isBefore(LocalDate.now()) ||
                     ( deadline_date.isEqual(LocalDate.now()) && timeNow>=timeSetted )) {
-                System.out.println(timeNow + "  " + timeSetted);
                     Toast.makeText(this, R.string.enter_date_after_now, Toast.LENGTH_SHORT).show();
                 return;
             }
 
             //todo -- get task id from server
             int id = 3;
-            AppData.getChildren().get(selectedChildID).getOneTimeTaskContainer().add(new OneTimeTask(
-                    id,
-                    task_name,
-                    deadline_date,
-                    deadline_hour,
-                    deadline_minute
-            ));
-            finish();
+            if (oneTimeTasks != null){
+                oneTimeTasks.add(new OneTimeTask(
+                        id,
+                        task_name,
+                        deadline_date,
+                        deadline_hour,
+                        deadline_minute,
+                        max_points
+                ));
+                finish();
+            }
+
         }
+    }
+
+    private void errorMessage(){
+        //todo -- error if null
+        Toast.makeText(this, R.string.error_field_required, Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -7,7 +7,7 @@ public class RepetitiveTask extends ChildTask implements Comparable<RepetitiveTa
     public RepetitiveTask(Integer task_id, String taskText, int necessaryProgress, int startHour, int startMinute) {
         super.task_id = task_id;
         super.taskText = taskText;
-        this.necessaryProgress = necessaryProgress;
+        this.finishReward = necessaryProgress;
         this.startHour = startHour;
         this.startMinute = startMinute;
     }

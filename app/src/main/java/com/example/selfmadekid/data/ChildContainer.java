@@ -1,5 +1,7 @@
 package com.example.selfmadekid.data;
 
+import android.util.SparseArray;
+
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
@@ -11,28 +13,58 @@ public class ChildContainer {
     private String name;
     private String surname;
     private String patronymic;
+    private int goalID=0;
+    private Goal currentGoal;
+    private SparseArray<Goal> finishedGoals = new SparseArray<Goal>();
 
 
-    private HashMap<DayOfWeek, RepetitiveTasksList > repetitiveTaskContainer =
-        new HashMap<DayOfWeek, RepetitiveTasksList>() {{
-            put(DayOfWeek.MONDAY, new RepetitiveTasksList());
-            put(DayOfWeek.TUESDAY, new  RepetitiveTasksList());
-            put(DayOfWeek.WEDNESDAY, new RepetitiveTasksList());
-            put(DayOfWeek.THURSDAY, new RepetitiveTasksList());
-            put(DayOfWeek.FRIDAY, new RepetitiveTasksList());
-            put(DayOfWeek.SATURDAY, new RepetitiveTasksList());
-            put(DayOfWeek.SUNDAY, new RepetitiveTasksList());
-        }};
 
-    private OneTimeTaskList oneTimeTaskContainer = new OneTimeTaskList();
-
-
-    public OneTimeTaskList getOneTimeTaskContainer() {
-        return oneTimeTaskContainer;
+    public ChildContainer(int id, String name, String surname, String patronymic) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
     }
 
-    public RepetitiveTasksList getDayOfTheWeekContainer(DayOfWeek dayOfWeek){
-        return repetitiveTaskContainer.get(dayOfWeek);
+    public ChildContainer(int id, String name, String surname, String patronymic, Goal currentGoal) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.currentGoal = currentGoal;
     }
 
+    public ChildContainer(int id, String name, String surname, String patronymic, Goal currentGoal, SparseArray<Goal> finishedGoals) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.currentGoal = currentGoal;
+        this.finishedGoals = finishedGoals;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public Goal getCurrentGoal() {
+        return currentGoal;
+    }
+
+    public void setCurrentGoal(Goal currentGoal) {
+        this.currentGoal = currentGoal;
+    }
 }

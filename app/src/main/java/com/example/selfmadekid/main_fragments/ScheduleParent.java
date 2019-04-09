@@ -17,6 +17,10 @@ import com.example.selfmadekid.LoginActivity;
 import com.example.selfmadekid.MainActivity;
 import com.example.selfmadekid.R;
 import com.example.selfmadekid.adapters.TaskRecyclerAdapter;
+import com.example.selfmadekid.data.ChildContainer;
+import com.example.selfmadekid.data.Goal;
+import com.example.selfmadekid.data.RepetitiveTask;
+import com.example.selfmadekid.data.RepetitiveTasksList;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -54,11 +58,6 @@ public class ScheduleParent extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-
-
-        //mCalendarView.setAccessibilityHeading(false);
 
 
         View view = inflater.inflate(R.layout.fragment_schedudle_parent, container, false);
@@ -83,11 +82,13 @@ public class ScheduleParent extends Fragment {
             public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView, @NonNull CalendarDay calendarDay, boolean b) {
                 //todo fine listener
                 LocalDate localDate = calendarDay.getDate();
-
-                adapter = new TaskRecyclerAdapter(getContext(), localDate.getDayOfWeek(), ((MainActivity) getContext()).getChildContainer().getDayOfTheWeekContainer(localDate.getDayOfWeek()), ((MainActivity) getContext()).getSelectedChildID());
+                ChildContainer childContainer = ((MainActivity) getContext()).getChildContainer();
+                Goal goal = null;
+                if (childContainer != null){
+                    goal = childContainer.getCurrentGoal();
+                }
+                adapter = new TaskRecyclerAdapter(getContext(), goal, ((MainActivity) getContext()).getSelectedChildID(), localDate.getDayOfWeek());
                 recyclerView.setAdapter(adapter);
-
-                System.out.println(localDate);
             }
         });
 
@@ -95,14 +96,18 @@ public class ScheduleParent extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new TaskRecyclerAdapter(getContext(), LocalDate.now().getDayOfWeek() ,((MainActivity) getContext()).getChildContainer().getDayOfTheWeekContainer(LocalDate.now().getDayOfWeek()), ((MainActivity) getContext()).getSelectedChildID() );
+
+        ChildContainer childContainer = ((MainActivity) getContext()).getChildContainer();
+        Goal goal = null;
+        if (childContainer != null){
+            goal = childContainer.getCurrentGoal();
+        }
+
+                adapter = new TaskRecyclerAdapter(getContext(), goal, ((MainActivity) getContext()).getSelectedChildID(), LocalDate.now().getDayOfWeek());
         recyclerView.setAdapter(adapter);
 
 
         return view;
     }
-
-
-
 
 }

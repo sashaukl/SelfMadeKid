@@ -9,13 +9,13 @@ public class OneTimeTask extends ChildTask implements Comparable<OneTimeTask> {
     private LocalDate deadlineDate;
 
 
-    public OneTimeTask(Integer task_id, String taskText, LocalDate deadlineDate, int deadlineHour, int deadline_minute ){
+    public OneTimeTask(Integer task_id, String taskText, LocalDate deadlineDate, int deadlineHour, int deadline_minute, int finishReward){
         super.task_id = task_id;
         super.taskText = taskText;
         this.deadlineDate = deadlineDate;
         this.deadlineHour = deadlineHour;
         this.deadlineMinute = deadline_minute;
-        super.necessaryProgress = 1;
+        super.finishReward = finishReward;
     }
 
     public int getDeadlineHour() {

@@ -18,10 +18,23 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A login screen that offers login via email/password.
@@ -42,10 +55,12 @@ public class LoginActivity extends AppCompatActivity  {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private View mPasswordRepeatView;
+    private EditText mPasswordRepeatView;
     private Button mTopLoginOrRegButton;
     private Button mBottomLoginOrRegButton;
     private TextView mTextSwitcher;
+    private int loginID = -1;
+    private boolean connectError = true;
 
     //animation
     AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f ) ;
@@ -103,13 +118,13 @@ public class LoginActivity extends AppCompatActivity  {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-
         //animation settings
         fadeIn.setDuration(300);
         fadeIn.setFillAfter(true);
         fadeOut.setDuration(300);
         fadeOut.setFillAfter(true);
         fadeOut.setAnimationListener(textChangeAnimation);
+
 
 
     }
@@ -145,6 +160,12 @@ public class LoginActivity extends AppCompatActivity  {
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
+            cancel = true;
+        }
+
+        if (isRegistration && !mPasswordView.getText().toString().equals(mPasswordRepeatView.getText().toString())){
+            mPasswordRepeatView.setError(getString(R.string.passwords_must_be_the_same));
+            focusView = mPasswordRepeatView;
             cancel = true;
         }
 
@@ -222,7 +243,6 @@ public class LoginActivity extends AppCompatActivity  {
     public void onBottomLoginOrRegistrationPressed(View view){
 
         if (isRegistration){
-            System.out.println("isREG");
             mPasswordRepeatView.setVisibility(View.GONE);
             mTopLoginOrRegButton.setText(R.string.action_sign_in);
             mBottomLoginOrRegButton.setText(R.string.registration);
@@ -253,35 +273,94 @@ public class LoginActivity extends AppCompatActivity  {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+                StringRequest stringRequest;
+                if (isRegistration){
+                    stringRequest = new StringRequest(Request.Method.POST,
+                            getString(R.string.register_script),
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+                                        if (jsonObject.get("error").equals("")){
+                                            loginID = Integer.valueOf(jsonObject.get("id").toString());
+                                            onPostExecute(true);
+                                        }else{
+                                            makeToast(jsonObject.get("error").toString());
+                                        }
+                                    } catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("email", mEmail);
+                            params.put("password", mPassword);
+
+                            return params;
+                        }
+                    };
+                }else{
+                    stringRequest = new StringRequest(Request.Method.POST,
+                            getString(R.string.login_script),
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    System.out.println(response);
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+                                        if (jsonObject.get("error").equals("")){
+                                            loginID = Integer.valueOf(jsonObject.get("id").toString());
+                                            onPostExecute(true);
+                                        }else{
+                                            makeToast(jsonObject.get("error").toString());
+                                        }
+                                    } catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("email", mEmail);
+                            params.put("password", mPassword);
+
+                            return params;
+                        }
+                    };
+                }
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                requestQueue.add(stringRequest);
+            }catch (Exception e) {
             }
 
-            //todo проверка на сервере
-
-            // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
             showProgress(false);
-
             if (success) {
-
                 Intent intent = new Intent(context, MainActivity.class);
+                intent.putExtra("id", loginID);
                 startActivity(intent);
-
-
                 finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
             }
         }
 
@@ -290,6 +369,10 @@ public class LoginActivity extends AppCompatActivity  {
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    private void makeToast(String str){
+        Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }
 }
 

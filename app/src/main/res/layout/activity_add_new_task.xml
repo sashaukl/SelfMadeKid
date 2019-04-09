@@ -513,6 +513,7 @@
                             android:visibility="gone"
                             app:mcv_monthLabels="@array/custom_months"
 
+                            app:mcv_firstDayOfWeek="monday"
                             app:mcv_selectionMode="single"
                             app:mcv_weekDayLabels="@array/custom_days_of_the_week"
 
