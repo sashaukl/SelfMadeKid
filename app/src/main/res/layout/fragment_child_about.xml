@@ -17,6 +17,7 @@
         android:layout_marginBottom="10dp"
         />
     <androidx.cardview.widget.CardView
+        android:id="@+id/current_goal"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="80dp"

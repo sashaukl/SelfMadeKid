@@ -198,10 +198,6 @@ public class AddNewChildActivity extends AppCompatActivity  {
         }
     }
 
-
-
-
-
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -277,7 +273,7 @@ public class AddNewChildActivity extends AppCompatActivity  {
             showProgress(false);
             if (success) {
                 Intent intent = new Intent(context, MainActivity.class);
-                intent.putExtra("child_id", childID);
+                intent.putExtra("new_child_id", childID);
                 startActivity(intent);
                 finish();
             }

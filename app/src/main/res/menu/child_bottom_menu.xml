@@ -2,14 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/child_select" />
-
-    <item
         android:id="@+id/info"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/info" />
+
     <item
         android:id="@+id/child_schedule"
         android:icon="@drawable/ic_dashboard_black_24dp"

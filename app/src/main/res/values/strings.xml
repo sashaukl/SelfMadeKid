@@ -99,14 +99,18 @@
     <string name="first_name">Имя</string>
     <string name="second_name">Фамилия</string>
     <string name="patronymic">Отчество</string>
-
+    <string name="name_title">Название</string>
 
     <string name="register_script">http://10.0.2.2/myselfkid/register.php</string>
     <string name="login_script">http://10.0.2.2/myselfkid/login.php</string>
     <string name="add_child_script">http://10.0.2.2/myselfkid/add_child.php</string>
     <string name="get_children_script">http://10.0.2.2/myselfkid/getchildren.php</string>
     <string name="get_child_data">http://10.0.2.2/myselfkid/get_child_data.php</string>
-
-
+    <string name="add_goal_script">http://10.0.2.2/myselfkid/add_goal.php</string>
+    <string name="add_one_time_task">http://10.0.2.2/myselfkid/add_one_time_task.php</string>
+    <string name="get_goal">http://10.0.2.2/myselfkid/get_goal.php</string>
+    <string name="get_tasks">http://10.0.2.2/myselfkid/get_tasks.php</string>
+    <string name="add_repetitive_task">http://10.0.2.2/myselfkid/add_repetitive_task.php</string>
+    <string name="get_repetitive_id">http://10.0.2.2/myselfkid/get_repetitive_id.php</string>
 
 </resources>

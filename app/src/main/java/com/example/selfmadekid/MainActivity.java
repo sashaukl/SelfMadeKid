@@ -19,9 +19,9 @@ import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;
 import com.example.selfmadekid.data.OneTimeTask;
 import com.example.selfmadekid.data.RepetitiveTask;
-import com.example.selfmadekid.main_fragments.ChildAbout;
-import com.example.selfmadekid.main_fragments.ChildSelect;
-import com.example.selfmadekid.main_fragments.ScheduleParent;
+import com.example.selfmadekid.parent_main_fragments.ChildAbout;
+import com.example.selfmadekid.parent_main_fragments.ChildSelect;
+import com.example.selfmadekid.parent_main_fragments.ScheduleParent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
 import java.util.HashMap;
@@ -42,13 +43,14 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private GetChildren mAuthTask = null;
+    private GetChildren childDataTask = null;
     private TextView mTextMessage;
     private ChildContainer childContainer;
     private int selectedChildID = -1;
     private int userID = -1;
     public int lastNavigationItemSelected = R.id.navigation_home;
     Context context;
+    private GetTasks getTasks = null;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -71,9 +73,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.child_schedule:
                 loadFragment(ScheduleParent.newInstance());
                 return true;
-            case R.id.navigation_notifications:
-                //mTextMessage.setText(R.string.title_notifications);
-                return true;
         }
         return false;
     }
@@ -92,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         loadFragment(ChildSelect.newInstance());
 
-        mAuthTask = new GetChildren();
-        mAuthTask.execute((Void) null);
+        childDataTask = new GetChildren();
+        childDataTask.execute((Void) null);
 
 
     }
@@ -113,9 +112,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onAddTaskButtonPressed(View view){
         if (selectedChildID != -1){
-            Intent intent = new Intent(this, AddNewTaskActivity.class);
-            intent.putExtra("id", selectedChildID);
-            startActivity(intent);
+            if (AppData.getChildren().get(selectedChildID).getCurrentGoal()!= null){
+                if (AppData.getChildren().get(selectedChildID).getCurrentGoal().getGoal_id()!= -1 && AppData.getChildren().get(selectedChildID).getCurrentGoal().getGoal_id()!= 0){
+                    Intent intent = new Intent(this, AddNewTaskActivity.class);
+                    intent.putExtra("id", selectedChildID);
+                    startActivity(intent);
+                }
+            }
         }
     }
 
@@ -128,6 +131,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        int newID  = getIntent().getIntExtra("new_child_id", -1);
+        if (newID != -1){
+            if (childDataTask == null){
+                childDataTask = new GetChildren();
+            }
+            childDataTask.getChild(newID);
+        }
         preLoad(lastNavigationItemSelected);
     }
 
@@ -152,20 +162,22 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(String response) {
                                 try {
-                                    System.out.println(response);
                                     JSONArray jsonArray = new JSONArray(response);
                                     for (int i=0; i<jsonArray.length(); i++){
                                         getChild(jsonArray.getInt(i));
+                                        if (selectedChildID == -1){
+                                            if (AppData.getChildren().size()!=0){
+
+                                            }
+                                        }
                                     }
                                 } catch (Exception e){
                                     e.printStackTrace();
                                 }
-
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                     }
                 }){
                     @Override
@@ -179,48 +191,51 @@ public class MainActivity extends AppCompatActivity {
                 requestQueue.add(stringRequest);
             }catch (Exception e) {
             }
-
             return false;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            //showProgress(false);
-            if (success) {
-                //Intent intent = new Intent(context, MainActivity.class);
-                //intent.putExtra("child_id", childID);
-                //startActivity(intent);
-                //finish();
-            }
         }
 
         @Override
         protected void onCancelled() {
-            mAuthTask = null;
-            //showProgress(false);
         }
 
 
         protected ChildContainer getChild(final int childID){
             try {
                 StringRequest stringRequest;
-                ChildContainer childContainer;
+                final ChildContainer childContainer;
                 stringRequest = new StringRequest(Request.Method.POST,
                         getString(R.string.get_child_data),
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 try {
-                                    System.out.println(response);
                                     JSONObject jsonObject = new JSONObject(response);
-                                    ChildContainer childContainer = new ChildContainer(childID,
+                                    if (selectedChildID == -1){
+                                        selectedChildID = childID;
+                                        System.out.println("selectedChildID" + selectedChildID );
+                                    }
+
+
+                                    ChildContainer cContainer = new ChildContainer(
+                                            childID,
                                             jsonObject.get("name").toString(),
                                             jsonObject.get("surname").toString(),
                                             jsonObject.get("patronymic").toString()
                                             //Goal //todo -- make goal
 
                                     );
-                                    AppData.getChildren().append(childID, childContainer);
+
+                                    AppData.getChildren().append(childID, cContainer);
+
+                                    int goalID = jsonObject.getInt("current_goal_id");
+                                    if (goalID != 0){
+                                        getGoal(goalID, childID);
+                                    }
+                                    preLoad(lastNavigationItemSelected);
                                 } catch (Exception e){
                                     e.printStackTrace();
                                 }
@@ -246,8 +261,152 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+
+        protected void getGoal(final int goal_id, final int child_id ){
+            try {
+                StringRequest stringRequest;
+                ChildContainer childContainer;
+                stringRequest = new StringRequest(Request.Method.POST,
+                        getString(R.string.get_goal),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    if (jsonObject.has("name")){
+                                        Goal goal = new Goal(
+                                                jsonObject.getString("name"),
+                                                jsonObject.getInt("current_points"),
+                                                jsonObject.getInt("finish_points"),
+                                                goal_id
+                                        );
+                                        AppData.getChildren().get(child_id).setCurrentGoal(goal);
+                                        GetTasks mGetTasks =  new GetTasks(goal_id, child_id);
+                                        mGetTasks.execute();
+                                    }
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("goal_id", Integer.valueOf(goal_id).toString() );
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                requestQueue.add(stringRequest);
+            }catch (Exception e) {
+            }
+            return;
+        }
     }
-    private void makeToast(String str){
+
+
+
+    public class GetTasks extends AsyncTask<Void, Void, Boolean> {
+
+        private int goalID;
+        private int childID;
+
+        public GetTasks(int goalID, int childID) {
+            this.goalID = goalID;
+            this.childID = childID;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                StringRequest stringRequest;
+                stringRequest = new StringRequest(Request.Method.POST,
+                        getString(R.string.get_tasks),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonObject =  new JSONObject(response);
+
+                                    JSONArray one_time_tasks = ((JSONArray) jsonObject.get("one_time_tasks"));
+
+                                    for (int i=0; i<one_time_tasks.length();i++){
+                                        JSONObject row = new JSONObject(one_time_tasks.get(i).toString());
+                                        AppData.getChildren().get(childID).getCurrentGoal().getOneTimeTaskContainer().add(new OneTimeTask(
+                                                row.getInt("task_id"),
+                                                row.getString("name"),
+                                                //no to millis usage :(
+                                                LocalDate.of(
+                                                        row.getInt("year_end"),
+                                                        row.getInt("month_end"),
+                                                        row.getInt("day_end")
+                                                ),
+                                                row.getInt("hour_end"),
+                                                row.getInt("minute_end"),
+                                                row.getInt("value")
+                                        ));
+                                    }
+
+                                    JSONArray reprtitive_tasks  = ((JSONArray) jsonObject.get("repetitive_tasks"));
+                                    for (int i=0; i<reprtitive_tasks.length();i++){
+                                        JSONObject row = new JSONObject(reprtitive_tasks.get(i).toString());
+                                        AppData.getChildren().get(childID).getCurrentGoal().getDayOfTheWeekContainer(DayOfWeek.of(row.getInt("day"))).add(
+                                                new RepetitiveTask(
+                                                        row.getInt("task_id"),
+                                                        row.getString("name"),
+                                                        row.getInt("value"),
+                                                        row.getInt("hour"),
+                                                        row.getInt("minute")
+                                                )
+                                        );
+                                    }
+
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("goal_id", Integer.valueOf(goalID).toString());
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                requestQueue.add(stringRequest);
+            } catch (Exception e) {
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+
+
+
+
+
+
+        private void makeToast(String str){
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }
 }

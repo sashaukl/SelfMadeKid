@@ -52,7 +52,6 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = mInflater.inflate(R.layout.select_child_item, parent, false);
-        System.out.println("fdsfsdfsdfsdfdsfsdfsdfdsfdsfsd");
         return new ChildRecyclerAdapter.ViewHolder(v);
     }
 
@@ -88,7 +87,6 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         int type = getItemViewType(position);
         ChildContainer item = getItem(position);
-        System.out.println("dsadas");
         holder.child_item_text.setText(item.getName()  + " " + item.getPatronymic());
 
 

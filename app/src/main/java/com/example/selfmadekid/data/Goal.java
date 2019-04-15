@@ -12,13 +12,22 @@ public class Goal {
     private String goalName;
     private int currentPoints = 0;
     private int finishPoints;
+    private int goal_id;
     private Set<LocalDate> repetitiveTaskEnded = new ArraySet<>();
 
 
 
-    public Goal(String goal_name, int need_points) {
+    public Goal(String goal_name, int need_points, int id) {
         this.goalName = goal_name;
         this.finishPoints = need_points;
+        this.goal_id=id;
+    }
+
+    public Goal(String goal_name, int need_points, int currentPoints , int id) {
+        this.goalName = goal_name;
+        this.finishPoints = need_points;
+        this.currentPoints = currentPoints;
+        this.goal_id=id;
     }
 
 
@@ -75,4 +84,7 @@ public class Goal {
         this.finishPoints = finishPoints;
     }
 
+    public int getGoal_id() {
+        return goal_id;
+    }
 }

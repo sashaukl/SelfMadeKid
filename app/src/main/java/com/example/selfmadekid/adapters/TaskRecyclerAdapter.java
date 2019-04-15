@@ -97,7 +97,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
         switch (type) {
             case TYPE_HEADER:
                 String str = repetitiveTasks.get(position).getStartHour() + ":00";
-                holder.mHeaderText.setText(str) ;
+                holder.mHeaderText.setText(str);
             case TYPE_ITEM:
                 childTask = getItem(position);
                 holder.child_item_text.setText(childTask.getTaskText());

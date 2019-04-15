@@ -19,6 +19,9 @@ import com.google.android.material.tabs.TabLayout;
 public class SelectRoleActivity extends AppCompatActivity implements TabParent.OnFragmentInteractionListener, TabChild.OnFragmentInteractionListener {
 
     private TextView mTextMessage;
+    public static final int PARENT_ROLE = 1;
+    public static final int CHILD_ROLE = 2;
+
 
 
     @Override
@@ -64,14 +67,17 @@ public class SelectRoleActivity extends AppCompatActivity implements TabParent.O
     }
 
     public void onParentButtonPressed(View view){
-        System.out.println("onParentButtonPressed");
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.putExtra("role_name", PARENT_ROLE);
         startActivity(intent);
         finish();
     }
 
     public void onChildButtonPressed(View view){
-        System.out.println("onChildButtonPressed");
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.putExtra("role_name", CHILD_ROLE);
+        startActivity(intent);
+        finish();
     }
 
 }

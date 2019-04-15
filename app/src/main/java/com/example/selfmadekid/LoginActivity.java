@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity  {
     private Button mBottomLoginOrRegButton;
     private TextView mTextSwitcher;
     private int loginID = -1;
+    private int roleID = -1;
     private boolean connectError = true;
 
     //animation
@@ -124,6 +125,10 @@ public class LoginActivity extends AppCompatActivity  {
         fadeOut.setDuration(300);
         fadeOut.setFillAfter(true);
         fadeOut.setAnimationListener(textChangeAnimation);
+        roleID = getIntent().getIntExtra("role_name", -1);
+        if (roleID == SelectRoleActivity.CHILD_ROLE){
+            mBottomLoginOrRegButton.setVisibility(View.GONE);
+        }
 
 
 
@@ -340,7 +345,7 @@ public class LoginActivity extends AppCompatActivity  {
                             Map<String, String> params = new HashMap<>();
                             params.put("email", mEmail);
                             params.put("password", mPassword);
-
+                            params.put("type", Integer.valueOf(roleID).toString());
                             return params;
                         }
                     };
@@ -348,6 +353,7 @@ public class LoginActivity extends AppCompatActivity  {
                 RequestQueue requestQueue = Volley.newRequestQueue(context);
                 requestQueue.add(stringRequest);
             }catch (Exception e) {
+
             }
 
             return false;
@@ -357,11 +363,20 @@ public class LoginActivity extends AppCompatActivity  {
         protected void onPostExecute(final Boolean success) {
             showProgress(false);
             if (success) {
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.putExtra("id", loginID);
-                startActivity(intent);
-                finish();
+                if (roleID == SelectRoleActivity.PARENT_ROLE){
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.putExtra("id", loginID);
+                    startActivity(intent);
+                    finish();
+                }
+                if (roleID == SelectRoleActivity.CHILD_ROLE){
+                    Intent intent = new Intent(context, ChildMainActivity.class);
+                    intent.putExtra("id", loginID);
+                    startActivity(intent);
+                    finish();
+                }
             }
+            onCancelled();
         }
 
         @Override

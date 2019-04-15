@@ -1,4 +1,4 @@
-package com.example.selfmadekid.main_fragments;
+package com.example.selfmadekid.child_main_fragments;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.selfmadekid.ChildMainActivity;
 import com.example.selfmadekid.MainActivity;
 import com.example.selfmadekid.R;
 import com.example.selfmadekid.data.ChildContainer;
@@ -15,14 +16,14 @@ import com.example.selfmadekid.data.Goal;
 
 import androidx.fragment.app.Fragment;
 
-public class ChildAbout extends Fragment {
+public class ChildAboutFragmentChild extends Fragment {
 
     private TextView mGoalText;
     private Goal goal;
     private ProgressBar mProgressBar;
     private TextView mProgressText;
 
-    public ChildAbout() {
+    public ChildAboutFragmentChild() {
         // Required empty public constructor
     }
 
@@ -33,9 +34,9 @@ public class ChildAbout extends Fragment {
     }
 
 
-    public static ChildAbout newInstance() {
+    public static ChildAboutFragmentChild newInstance() {
         //this.context = context;
-        return new ChildAbout();
+        return new ChildAboutFragmentChild();
     }
 
     @Override
@@ -47,9 +48,9 @@ public class ChildAbout extends Fragment {
         mProgressText = view.findViewById(R.id.progress_text);
         mGoalText = view.findViewById(R.id.goal_text);
         mProgressBar = view.findViewById(R.id.child_progress_bar);
-        ChildContainer childContainer = ((MainActivity) getActivity()).getChildContainer();
+        ChildContainer childContainer = ((ChildMainActivity) getActivity()).getChildContainer();
         if (childContainer != null){
-            goal = ((MainActivity) getActivity()).getChildContainer().getCurrentGoal();
+            goal = ((ChildMainActivity) getActivity()).getChildContainer().getCurrentGoal();
             if (goal != null){
                 mGoalText.setText(goal.getGoalName());
                 Drawable drawable = getContext().getDrawable(R.drawable.progress_bar_circle);
