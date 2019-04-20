@@ -1,5 +1,6 @@
 package com.example.selfmadekid.parent_main_fragments;
 
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.selfmadekid.ChildMainActivity;
 import com.example.selfmadekid.MainActivity;
@@ -48,7 +51,6 @@ public class ScheduleParent extends Fragment {
 
 
     public static ScheduleParent newInstance() {
-        //this.context = context;
         return new ScheduleParent();
     }
 
@@ -63,8 +65,6 @@ public class ScheduleParent extends Fragment {
         mCalendarView = view.findViewById(R.id.calendarView);
         mCalendarView.setTitleFormatter(new MonthArrayTitleFormatter(getResources().getTextArray(R.array.custom_months)));
         final Calendar calendar = Calendar.getInstance();
-
-
         Calendar now = Calendar.getInstance();
 
         //only way why its works :(
@@ -78,16 +78,17 @@ public class ScheduleParent extends Fragment {
         mCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView, @NonNull CalendarDay calendarDay, boolean b) {
-                //todo fine listener
                 LocalDate localDate = calendarDay.getDate();
                 Goal goal = null;
                 if (childContainer != null){
                     goal = childContainer.getCurrentGoal();
                 }
-                adapter = new TaskRecyclerAdapter(getContext(), goal, getSelectedChildID(), localDate.getDayOfWeek());
+                adapter = new TaskRecyclerAdapter(getContext(), goal, getSelectedChildID(), localDate);
                 recyclerView.setAdapter(adapter);
             }
         });
+
+        
 
         recyclerView = (RecyclerView) view.findViewById(R.id.task_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -98,9 +99,9 @@ public class ScheduleParent extends Fragment {
         if (childContainer != null){
             goal = childContainer.getCurrentGoal();
         }
-
-        adapter = new TaskRecyclerAdapter(getContext(), goal, getSelectedChildID(), LocalDate.now().getDayOfWeek());
+        adapter = new TaskRecyclerAdapter(getContext(), goal, getSelectedChildID(), LocalDate.now());
         recyclerView.setAdapter(adapter);
+
 
         return view;
     }

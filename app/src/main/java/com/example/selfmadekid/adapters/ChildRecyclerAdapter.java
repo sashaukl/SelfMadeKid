@@ -1,34 +1,24 @@
 package com.example.selfmadekid.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.selfmadekid.MainActivity;
 import com.example.selfmadekid.R;
-import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
-import com.example.selfmadekid.data.ChildTask;
-import com.example.selfmadekid.data.OneTimeTask;
-import com.example.selfmadekid.data.RepetitiveTask;
-
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdapter.ViewHolder>  {
 
     private LayoutInflater mInflater;
-    private TaskRecyclerAdapter.ItemClickListener mClickListener;
+    private ItemClickListener mClickListener;
 
     private Context context;
     private ArrayList<ChildContainer> container;
@@ -38,6 +28,8 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
 
     private final int ONE_TIME_TYPE_ITEM = 2;
     private final int ONE_TIME_TYPE_HEADER = 3;
+    private View selectView;
+    private TextView selectedText;
 
 
 // data is passed into the constructor
@@ -64,15 +56,26 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView child_item_text;
+        Integer childID;
+        View mView;
 
         ViewHolder(View itemView) {
             super(itemView);
+            this.mView = itemView;
             child_item_text = itemView.findViewById(R.id.child_item_text);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (childID != null){
+                        ((MainActivity) context).setSelectedChildID(childID);
+                        changeSelectedChild(v);
+                    }
+                }
+            });
         }
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -88,13 +91,24 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
         int type = getItemViewType(position);
         ChildContainer item = getItem(position);
         holder.child_item_text.setText(item.getName()  + " " + item.getPatronymic());
+        holder.childID = item.getId();
+        if ( holder.childID == ((MainActivity) context).getSelectedChildID() ){
+           changeSelectedChild(holder.mView);
+        }
 
+    }
 
+    private void changeSelectedChild(View newChild){
+        if (selectView != null){
+            ((TextView) selectView.findViewById(R.id.child_item_text)).setTextColor(context.getColor(R.color.textPrimaryColor));
+        }
+        selectView = newChild;
+        ((TextView) selectView.findViewById(R.id.child_item_text)).setTextColor(context.getColor(R.color.colorAccent));
     }
 
 
     // allows clicks events to be caught
-    void setClickListener(TaskRecyclerAdapter.ItemClickListener itemClickListener) {
+    void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 

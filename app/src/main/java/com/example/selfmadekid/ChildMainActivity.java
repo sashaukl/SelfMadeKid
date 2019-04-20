@@ -17,6 +17,9 @@ import com.android.volley.toolbox.Volley;
 import com.example.selfmadekid.child_main_fragments.ChildAboutFragmentChild;
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
+import com.example.selfmadekid.data.Goal;
+import com.example.selfmadekid.data.OneTimeTask;
+import com.example.selfmadekid.data.RepetitiveTask;
 import com.example.selfmadekid.parent_main_fragments.ChildAbout;
 import com.example.selfmadekid.parent_main_fragments.ChildSelect;
 import com.example.selfmadekid.parent_main_fragments.ScheduleParent;
@@ -33,6 +36,8 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalDate;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -77,6 +82,7 @@ public class ChildMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.context = this;
         this.setContentView(R.layout.activity_child_main);
+        AppData.setCurrentState(AppData.CHILD);
         Locale locale = new Locale("RU");
         Locale.setDefault(locale);
         userID = getIntent().getIntExtra("id", -1);
@@ -87,8 +93,6 @@ public class ChildMainActivity extends AppCompatActivity {
 
         childDataTask = new GetChildren();
         childDataTask.execute();
-
-
     }
 
 
@@ -163,6 +167,12 @@ public class ChildMainActivity extends AppCompatActivity {
                                     );
 
                                     AppData.getChildren().append(userID, childContainer);
+
+                                    int goalID = jsonObject.getInt("current_goal_id");
+                                    if (goalID != 0){
+                                        getGoal(goalID, userID);
+                                    }
+
                                     System.out.println(AppData.getChildren().get(userID));
                                     preLoad(lastNavigationItemSelected);
                                 } catch (Exception e){
@@ -201,7 +211,193 @@ public class ChildMainActivity extends AppCompatActivity {
             childDataTask = null;
         }
 
+        protected void getGoal(final int goal_id, final int child_id ){
+            try {
+                StringRequest stringRequest;
+                ChildContainer childContainer;
+                stringRequest = new StringRequest(Request.Method.POST,
+                        getString(R.string.get_goal),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    if (jsonObject.has("name")){
+                                        Goal goal = new Goal(
+                                                jsonObject.getString("name"),
+                                                jsonObject.getInt("current_points"),
+                                                jsonObject.getInt("finish_points"),
+                                                goal_id
+                                        );
+                                        AppData.getChildren().get(child_id).setCurrentGoal(goal);
+                                        GetTasks mGetTasks =  new GetTasks(goal_id, child_id);
+                                        mGetTasks.execute();
+                                    }
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("goal_id", Integer.valueOf(goal_id).toString() );
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                requestQueue.add(stringRequest);
+            }catch (Exception e) {
+            }
+            return;
+        }
+
     }
+
+    public class GetTasks extends AsyncTask<Void, Void, Boolean> {
+
+        private int goalID;
+        private int childID;
+
+        public GetTasks(int goalID, int childID) {
+            this.goalID = goalID;
+            this.childID = childID;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                StringRequest stringRequest;
+                stringRequest = new StringRequest(Request.Method.POST,
+                        getString(R.string.get_tasks),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonObject =  new JSONObject(response);
+
+                                    JSONArray one_time_tasks = ((JSONArray) jsonObject.get("one_time_tasks"));
+
+                                    for (int i=0; i<one_time_tasks.length();i++){
+                                        JSONObject row = new JSONObject(one_time_tasks.get(i).toString());
+                                        AppData.getChildren().get(childID).getCurrentGoal().getOneTimeTaskContainer().add(new OneTimeTask(
+                                                row.getInt("task_id"),
+                                                row.getString("name"),
+                                                //no to millis usage :(
+                                                LocalDate.of(
+                                                        row.getInt("year_end"),
+                                                        row.getInt("month_end"),
+                                                        row.getInt("day_end")
+                                                ),
+                                                row.getInt("hour_end"),
+                                                row.getInt("minute_end"),
+                                                row.getInt("value"),
+                                                row.getInt("finished")
+                                        ));
+                                    }
+
+                                    JSONArray reprtitive_tasks  = ((JSONArray) jsonObject.get("repetitive_tasks"));
+                                    for (int i=0; i<reprtitive_tasks.length();i++){
+                                        JSONObject row = new JSONObject(reprtitive_tasks.get(i).toString());
+                                        AppData.getChildren().get(childID).getCurrentGoal().getDayOfTheWeekContainer(DayOfWeek.of(row.getInt("day"))).add(
+                                                new RepetitiveTask(
+                                                        row.getInt("task_id"),
+                                                        row.getString("name"),
+                                                        row.getInt("value"),
+                                                        row.getInt("hour"),
+                                                        row.getInt("minute")
+                                                )
+                                        );
+                                        addRepetitiveCheckedTasks(row.getInt("task_id"));
+                                    }
+
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("goal_id", Integer.valueOf(goalID).toString());
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                requestQueue.add(stringRequest);
+            } catch (Exception e) {
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            forceLoadingFragment();
+        }
+
+        @Override
+        protected void onCancelled() {
+
+        }
+
+        private void addRepetitiveCheckedTasks(final int task_id){
+            try {
+                AppData.getChildren().get(childID).getCurrentGoal().getCheckedDates().put(task_id, new HashMap<LocalDate, Integer>());
+                StringRequest stringRequest;
+                stringRequest = new StringRequest(Request.Method.POST,
+                        getString(R.string.get_checked_repetitive_tasks),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    System.out.println(response);
+                                    JSONObject jsonObject =  new JSONObject(response);
+                                    if (jsonObject.getString("error").isEmpty()){
+                                        JSONArray checked_tasks = ((JSONArray) jsonObject.get("0"));
+                                        for (int i=0; i<checked_tasks.length();i++){
+                                            JSONObject row = new JSONObject(checked_tasks.get(i).toString());
+                                            AppData.getChildren().get(childID).getCurrentGoal().getCheckedDates().get(task_id).put(LocalDate.of(
+                                                    row.getInt("year"),
+                                                    row.getInt("month"),
+                                                    row.getInt("day")),row.getInt("finished"));
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("task_id", Integer.valueOf(task_id).toString());
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                requestQueue.add(stringRequest);
+            } catch (Exception e) {
+            }
+        }
+
+    }
+
     private void makeToast(String str){
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }

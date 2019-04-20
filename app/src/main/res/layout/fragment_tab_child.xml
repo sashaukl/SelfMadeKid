@@ -13,15 +13,6 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="@color/backgroundColor"
         >
-
-
-
-
-
-
-
-
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/line2_login_select_parent_or_child_activity"
             android:layout_width="wrap_content"

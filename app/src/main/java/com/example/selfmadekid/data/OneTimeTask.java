@@ -7,6 +7,7 @@ public class OneTimeTask extends ChildTask implements Comparable<OneTimeTask> {
     private int deadlineHour;
     private int deadlineMinute;
     private LocalDate deadlineDate;
+    private int confirmed = 0;
 
 
     public OneTimeTask(Integer task_id, String taskText, LocalDate deadlineDate, int deadlineHour, int deadline_minute, int finishReward){
@@ -16,6 +17,16 @@ public class OneTimeTask extends ChildTask implements Comparable<OneTimeTask> {
         this.deadlineHour = deadlineHour;
         this.deadlineMinute = deadline_minute;
         super.finishReward = finishReward;
+    }
+
+    public OneTimeTask(Integer task_id, String taskText, LocalDate deadlineDate, int deadlineHour, int deadline_minute, int finishReward, int confirmed){
+        super.task_id = task_id;
+        super.taskText = taskText;
+        this.deadlineDate = deadlineDate;
+        this.deadlineHour = deadlineHour;
+        this.deadlineMinute = deadline_minute;
+        super.finishReward = finishReward;
+        this.confirmed = confirmed;
     }
 
     public int getDeadlineHour() {
@@ -40,6 +51,14 @@ public class OneTimeTask extends ChildTask implements Comparable<OneTimeTask> {
 
     public void setDeadlineDate(LocalDate deadlineDate) {
         this.deadlineDate = deadlineDate;
+    }
+
+    public int getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(int confirmed) {
+        this.confirmed = confirmed;
     }
 
     @Override

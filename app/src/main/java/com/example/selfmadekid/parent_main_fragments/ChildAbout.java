@@ -3,6 +3,10 @@ package com.example.selfmadekid.parent_main_fragments;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +42,8 @@ import java.util.Map;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 public class ChildAbout extends Fragment {
@@ -50,7 +57,8 @@ public class ChildAbout extends Fragment {
     private CardView currentGoal;
     private String newGoalName="";
     private AddGoal addGoalTask = null;
-
+    private ImageButton goalCheckButton;
+    private View mProgressBarLayout;
 
     private int returnedNewGoalID = -1;
 
@@ -75,34 +83,52 @@ public class ChildAbout extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_child_about, container, false);
-
-        if (getActivity() instanceof MainActivity){
-            childContainer = ((MainActivity) getActivity()).getChildContainer();
-        }else if (getActivity() instanceof ChildMainActivity){
-            childContainer = ((ChildMainActivity) getActivity()).getChildContainer();
-        }
+        childContainer = AppData.getChildren().get(getSelectedChildID());
 
         currentGoal = view.findViewById(R.id.current_goal);
         mProgressText = view.findViewById(R.id.progress_text);
         mGoalText = view.findViewById(R.id.goal_text);
         mProgressBar = view.findViewById(R.id.child_progress_bar);
+        goalCheckButton = view.findViewById(R.id.goal_check);
+        mProgressBarLayout = view.findViewById(R.id.progress_bar_layout);
         if (childContainer != null){
             goal = childContainer.getCurrentGoal();
             if (goal != null){
+                System.out.println(goal.getCurrentPoints());
                 mGoalText.setText(goal.getGoalName());
                 Drawable drawable = getContext().getDrawable(R.drawable.progress_bar_circle);
-                mProgressBar.setMax(goal.getFinishPoints()); // Maximum Progress
-                mProgressBar.setSecondaryProgress(goal.getFinishPoints()); // Secondary Progress
-                mProgressBar.setProgressDrawable(drawable);
-                mProgressBar.setProgress(goal.getCurrentPoints());
-                mProgressText.setText(getString(R.string.goal_progress_bar_as_text, goal.getCurrentPoints(), goal.getFinishPoints()));
+                System.out.println("goal max points" + goal.getFinishPoints());
+                if (goal.isConfirmed()){
+                    mProgressBarLayout.setVisibility(View.VISIBLE);
+                    mProgressBar.setMax(goal.getFinishPoints()); // Maximum Progress
+                    mProgressBar.setSecondaryProgress(goal.getFinishPoints()); // Secondary Progress
+                    mProgressBar.setProgressDrawable(drawable);
+                    mProgressBar.setProgress(goal.getCurrentPoints());
+                    mProgressText.setText(getString(R.string.goal_progress_bar_as_text, goal.getCurrentPoints(), goal.getFinishPoints()));
+                }
+                else{
+                    goalCheckButton.setVisibility(View.VISIBLE);
+                    goalCheckButton.setColorFilter(ContextCompat.getColor(getContext(), R.color.silverColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                    if (getActivity() instanceof MainActivity){
+                        goalCheckButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                updatePointsDialog();
+                            }
+                        });
+                    }else {
+                        goalCheckButton.setClickable(false);
+                    }
+                }
             }
         }
         currentGoal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity() instanceof ChildMainActivity){
-                    buildAlertDialog();
+                if (goal == null){
+                    if (getActivity() instanceof ChildMainActivity){
+                        buildNameGoalDialog();
+                    }
                 }
             }
         });
@@ -121,10 +147,10 @@ public class ChildAbout extends Fragment {
     }
 
 
-    private void buildAlertDialog() {
+    private void buildNameGoalDialog() {
         dialog = new AlertDialog.Builder(getContext())
                 .setCancelable(true)
-                .setTitle(getString(R.string.point_count_to_end_task))
+                .setTitle(getString(R.string.name_title))
                 .setView(getLayoutInflater().inflate(R.layout.dialog_create_new_goal, null))
                 .setPositiveButton(getString(R.string.ok), null)
                 .setNegativeButton(getString(R.string.abort), new DialogInterface.OnClickListener() {
@@ -229,8 +255,122 @@ public class ChildAbout extends Fragment {
         }
     }
 
+
+
+    public class ConfirmTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final int goalID;
+        private final int finalPoints;
+
+        public ConfirmTask(int goalID, int finalPoints) {
+            this.goalID = goalID;
+            this.finalPoints = finalPoints;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                        getString(R.string.update_goal_points),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    System.out.println("update_goal_points" + response);
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    if (jsonObject.get("error").equals("")){
+                                        onPostExecute(true);
+                                    }else{
+                                        makeToast(jsonObject.get("error").toString());
+                                    }
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("goal_id", Integer.valueOf(goalID).toString() );
+                        params.put("points", Integer.valueOf(finalPoints).toString() );
+                        return params;
+                    }
+                };
+
+                RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                requestQueue.add(stringRequest);
+            }catch (Exception e) {
+
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                AppData.getChildren().get(getSelectedChildID()).getCurrentGoal().setFinishPoints(finalPoints);
+                ((MainActivity) getActivity()).forceLoadingFragment();
+            }
+            onCancelled();
+        }
+
+        @Override
+        protected void onCancelled() {
+            addGoalTask = null;
+        }
+    }
+
+
+
+
     private void makeToast(String str){
         Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
     }
+
+
+
+    private void updatePointsDialog() {
+        dialog = new AlertDialog.Builder(getContext())
+                .setCancelable(true)
+                .setTitle(getString(R.string.enter_points_count))
+                .setView(getLayoutInflater().inflate(R.layout.dialog_update_points, null))
+                .setPositiveButton(getString(R.string.ok), null)
+                .setNegativeButton(getString(R.string.abort), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
+        Button bt = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        bt.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    EditText mPoints = (EditText) ((Dialog)
+                            dialog).findViewById(R.id.points_edit_text);
+
+                    if (mPoints.getText().toString().equals("")) {
+                        mPoints.setError(getString(R.string.error_field_required));
+                    }else{
+                        int points = Integer.valueOf(mPoints.getText().toString());
+                        new ConfirmTask(goal.getGoal_id(), points ).execute();
+                        dialog.dismiss();
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
 
 }

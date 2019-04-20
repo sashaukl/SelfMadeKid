@@ -11,15 +11,12 @@
         android:layout_marginStart="20dp"
         android:textColor="@color/textPrimaryColor"
         />
-
-
     <include
-
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/child_item"/>
+
 </LinearLayout>

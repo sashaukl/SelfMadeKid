@@ -1,3 +1,10 @@
+<!DOCTYPE resources [
+
+    <!ENTITY host "http://ile1.diac.site">
+    <!ENTITY folder "self_made_kid">
+    ]>
+
+
 <resources>
     <string name="app_name">SelfMadeKid</string>
     <string name="child_select">Выбор ребенка</string>
@@ -36,6 +43,7 @@
     <string name="task_duration_2">%1$d час</string>
     <string name="task_duration_3">%1$d часа</string>
 
+    <string name="enter_points_count">Введите количество баллов за задачу</string>
 
     <string name="registration">Регистрация</string>
     <string name="task_type">Тип задачи</string>
@@ -93,7 +101,7 @@
     <string name="do_until_date">До %1$d.%2$02d.%3$04d</string>
     <string name="enter_deadline_time_and_date">Выберете дату и время дедлайна</string>
     <string name="enter_date_after_now">Выберете дату позднее настоящей</string>
-    <string name="add_goal">Добавить цель</string>
+    <string name="child_have_not_added_goal">Цель не добавлена</string>
     <string name="goal_progress_bar_as_text">%1$d/%2$d</string>
     <string name="add_new_child">Добавить нового ребенка</string>
     <string name="first_name">Имя</string>
@@ -101,16 +109,27 @@
     <string name="patronymic">Отчество</string>
     <string name="name_title">Название</string>
 
-    <string name="register_script">http://10.0.2.2/myselfkid/register.php</string>
-    <string name="login_script">http://10.0.2.2/myselfkid/login.php</string>
-    <string name="add_child_script">http://10.0.2.2/myselfkid/add_child.php</string>
-    <string name="get_children_script">http://10.0.2.2/myselfkid/getchildren.php</string>
-    <string name="get_child_data">http://10.0.2.2/myselfkid/get_child_data.php</string>
-    <string name="add_goal_script">http://10.0.2.2/myselfkid/add_goal.php</string>
-    <string name="add_one_time_task">http://10.0.2.2/myselfkid/add_one_time_task.php</string>
-    <string name="get_goal">http://10.0.2.2/myselfkid/get_goal.php</string>
-    <string name="get_tasks">http://10.0.2.2/myselfkid/get_tasks.php</string>
-    <string name="add_repetitive_task">http://10.0.2.2/myselfkid/add_repetitive_task.php</string>
-    <string name="get_repetitive_id">http://10.0.2.2/myselfkid/get_repetitive_id.php</string>
+
+
+
+
+
+    <string name="register_script">&host;/&folder;/register.php</string>
+    <string name="login_script">&host;/&folder;/login.php</string>
+    <string name="add_child_script">&host;/&folder;/add_child.php</string>
+    <string name="get_children_script">&host;/&folder;/getchildren.php</string>
+    <string name="get_child_data">&host;/&folder;/get_child_data.php</string>
+    <string name="add_goal_script">&host;/&folder;/add_goal.php</string>
+    <string name="add_one_time_task">&host;/&folder;/add_one_time_task.php</string>
+    <string name="get_goal">&host;/&folder;/get_goal.php</string>
+    <string name="get_tasks">&host;/&folder;/get_tasks.php</string>
+    <string name="add_repetitive_task">&host;/&folder;/add_repetitive_task.php</string>
+    <string name="get_repetitive_id">&host;/&folder;/get_repetitive_id.php</string>
+    <string name="update_goal_points">&host;/&folder;/update_goal_points.php</string>
+    <string name="check_on_time_task">&host;/&folder;/check_one_time_task.php</string>
+    <string name="check_repetitive_task">&host;/&folder;/check_repetitive_task.php</string>
+    <string name="get_checked_repetitive_tasks">&host;/&folder;/get_checked_repetitive_tasks.php</string>
+    <string name="current_goal">Текущая цель</string>
+
 
 </resources>

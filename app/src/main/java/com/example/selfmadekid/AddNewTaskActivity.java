@@ -361,7 +361,6 @@ public class AddNewTaskActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(String response) {
                                     try {
-
                                         System.out.println("one time add "+ response);
                                         JSONObject jsonObject = new JSONObject(response);
                                         if (jsonObject.getString("error").isEmpty()){

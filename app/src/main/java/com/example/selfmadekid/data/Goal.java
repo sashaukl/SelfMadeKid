@@ -14,20 +14,22 @@ public class Goal {
     private int finishPoints;
     private int goal_id;
     private Set<LocalDate> repetitiveTaskEnded = new ArraySet<>();
-
+    private boolean isConfirmed;
 
 
     public Goal(String goal_name, int need_points, int id) {
         this.goalName = goal_name;
         this.finishPoints = need_points;
         this.goal_id=id;
+        isConfirmed = finishPoints!=0;
     }
 
-    public Goal(String goal_name, int need_points, int currentPoints , int id) {
+    public Goal(String goal_name, int currentPoints, int need_points, int id) {
         this.goalName = goal_name;
         this.finishPoints = need_points;
         this.currentPoints = currentPoints;
         this.goal_id=id;
+        isConfirmed = finishPoints!=0;
     }
 
 
@@ -42,9 +44,17 @@ public class Goal {
                 put(DayOfWeek.SUNDAY, new RepetitiveTasksList());
             }};
 
+
     public RepetitiveTasksList getDayOfTheWeekContainer(DayOfWeek dayOfWeek){
         return repetitiveTaskContainer.get(dayOfWeek);
     }
+
+    private HashMap<Integer,HashMap<LocalDate,Integer>> checkedDates = new HashMap<Integer,HashMap<LocalDate,Integer>> () {};
+
+    public HashMap<Integer,HashMap<LocalDate,Integer>> getCheckedDates() {
+        return checkedDates;
+    }
+
 
 
     private OneTimeTaskList oneTimeTaskContainer = new OneTimeTaskList();
@@ -82,9 +92,18 @@ public class Goal {
 
     public void setFinishPoints(int finishPoints) {
         this.finishPoints = finishPoints;
+        isConfirmed = finishPoints!=0;
     }
 
     public int getGoal_id() {
         return goal_id;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        isConfirmed = confirmed;
+    }
+
+    public boolean isConfirmed() {
+        return isConfirmed;
     }
 }
