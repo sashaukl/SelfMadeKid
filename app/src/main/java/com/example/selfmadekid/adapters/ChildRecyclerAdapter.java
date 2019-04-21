@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.selfmadekid.MainActivity;
 import com.example.selfmadekid.R;
 import com.example.selfmadekid.data.ChildContainer;
 
 import java.util.ArrayList;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdapter.ViewHolder>  {
 

@@ -4,17 +4,20 @@ package com.example.selfmadekid;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
-
-import android.view.View;
-import android.widget.TextView;
 
 import com.example.selfmadekid.adapters.RoleSwitchingAdapter;
 import com.example.selfmadekid.select_role_tabs.TabChild;
 import com.example.selfmadekid.select_role_tabs.TabParent;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class SelectRoleActivity extends AppCompatActivity implements TabParent.OnFragmentInteractionListener, TabChild.OnFragmentInteractionListener {
 
@@ -29,6 +32,15 @@ public class SelectRoleActivity extends AppCompatActivity implements TabParent.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.role_select_activity);
 
+        FirebaseApp.initializeApp(this);
+        //String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        //Log.d("Token", "Token: " + refreshedToken);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new
+                    StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_select_role);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.parent));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.child));
@@ -58,17 +70,22 @@ public class SelectRoleActivity extends AppCompatActivity implements TabParent.O
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 
     public void onParentButtonPressed(View view){
+
+
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("Token", "Token: " + refreshedToken);
+
+
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.putExtra("role_name", PARENT_ROLE);
+        FirebaseApp.initializeApp(this);
         startActivity(intent);
         finish();
     }

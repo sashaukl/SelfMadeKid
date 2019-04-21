@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
-        <item>@font/averia_libre</item>
-        <item>@font/capriola</item>
-        <item>@font/expletus_sans</item>
-        <item>@font/expletus_sans_medium</item>
-        <item>@font/montserrat</item>
         <item>@font/open_sans_light</item>
         <item>@font/roboto_condensed_light</item>
     </array>

@@ -2,11 +2,7 @@ package com.example.selfmadekid.data;
 
 import android.util.SparseArray;
 
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ChildContainer {
     private int id;

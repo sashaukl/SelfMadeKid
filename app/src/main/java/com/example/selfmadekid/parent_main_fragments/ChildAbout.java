@@ -30,10 +30,10 @@ import com.android.volley.toolbox.Volley;
 import com.example.selfmadekid.ChildMainActivity;
 import com.example.selfmadekid.MainActivity;
 import com.example.selfmadekid.R;
-import com.example.selfmadekid.SelectRoleActivity;
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;
+
 
 import org.json.JSONObject;
 

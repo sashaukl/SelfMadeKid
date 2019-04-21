@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.selfmadekid.ChildMainActivity;
-import com.example.selfmadekid.MainActivity;
 import com.example.selfmadekid.R;
 import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;

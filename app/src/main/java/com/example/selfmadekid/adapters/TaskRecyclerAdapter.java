@@ -2,10 +2,6 @@ package com.example.selfmadekid.adapters;
 
 
 import android.content.Context;
-
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.drawable.Animatable;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -15,6 +11,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;

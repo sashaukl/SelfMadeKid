@@ -24,15 +24,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.example.selfmadekid.data.AppData;
-import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;
 import com.example.selfmadekid.data.OneTimeTask;
 import com.example.selfmadekid.data.OneTimeTaskList;
 import com.example.selfmadekid.data.RepetitiveTask;
 import com.example.selfmadekid.data.RepetitiveTasksList;
 import com.example.selfmadekid.data.TimeHolder;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -378,7 +377,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
                         @Override
                         protected Map<String, String> getParams() {
                             Map<String, String> params = new HashMap<>();
-                            System.out.println("GOALSLDLSDLSLDLDLS "+goal.getGoal_id());
+
                             params.put("goal_id", Integer.valueOf(goal.getGoal_id()).toString());
                             params.put("name", name);
                             params.put("value", Integer.valueOf(points).toString());

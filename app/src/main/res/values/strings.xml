@@ -131,5 +131,6 @@
     <string name="get_checked_repetitive_tasks">&host;/&folder;/get_checked_repetitive_tasks.php</string>
     <string name="current_goal">Текущая цель</string>
 
+    <string name="default_notification_channel_id" translatable="false"> fcm_default_channel</string>
 
 </resources>

@@ -14,16 +14,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.selfmadekid.child_main_fragments.ChildAboutFragmentChild;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;
 import com.example.selfmadekid.data.OneTimeTask;
 import com.example.selfmadekid.data.RepetitiveTask;
 import com.example.selfmadekid.parent_main_fragments.ChildAbout;
-import com.example.selfmadekid.parent_main_fragments.ChildSelect;
 import com.example.selfmadekid.parent_main_fragments.ScheduleParent;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.selfmadekid.R;
 
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the

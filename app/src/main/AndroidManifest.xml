@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.selfmadekid">
+    package="com.example.selfmadekid"
+    android:networkSecurityConfig="@xml/network_security_config"
+    >
+
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        tools:node="replace"
+        tools:replace="android:icon,android:label"
+        android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AddNewTaskActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden">
 
-        </activity>
+        <activity
+            android:name=".AddNewTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".SelectRoleActivity"
             android:theme="@style/Theme.Design.NoActionBar">
@@ -36,27 +38,46 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".AddNewChildActivity"
-            android:theme="@style/Theme.Design.NoActionBar">
-        </activity>
-
+            android:theme="@style/Theme.Design.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ChildMainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service android:name=".services.NotificationService"
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="false"
+            >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.INSTANSE" />
+            </intent-filter>
+        </service>
+
+
+        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="default_channel_id"/>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <meta-data android:name="android.security.net.config"
+            android:resource="@xml/network_security_config" />
+
     </application>
 
 </manifest>

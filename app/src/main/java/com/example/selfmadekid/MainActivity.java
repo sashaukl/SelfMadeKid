@@ -1,5 +1,6 @@
 package com.example.selfmadekid;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
@@ -15,6 +16,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;
@@ -23,12 +31,12 @@ import com.example.selfmadekid.data.RepetitiveTask;
 import com.example.selfmadekid.parent_main_fragments.ChildAbout;
 import com.example.selfmadekid.parent_main_fragments.ChildSelect;
 import com.example.selfmadekid.parent_main_fragments.ScheduleParent;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -40,9 +48,13 @@ import org.json.JSONObject;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+
+
 
 public class MainActivity extends AppCompatActivity {
     private GetChildren childDataTask = null;
@@ -93,11 +105,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         loadFragment(ChildSelect.newInstance());
-
         childDataTask = new GetChildren();
         childDataTask.execute((Void) null);
-
-
 
 
     }
@@ -152,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void setSelectedChildID(int selectedChildID) {
         this.selectedChildID = selectedChildID;
-        System.out.println(AppData.getChildren().get(selectedChildID).getCurrentGoal());
     }
 
     public class GetChildren extends AsyncTask<Void, Void, Boolean> {
@@ -225,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
                                     JSONObject jsonObject = new JSONObject(response);
                                     if (selectedChildID == -1){
                                         selectedChildID = childID;
-                                        System.out.println("selectedChildID" + selectedChildID );
                                     }
 
 
@@ -281,7 +288,6 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(String response) {
                                 try {
-                                    System.out.println("getGoal" + response);
                                     JSONObject jsonObject = new JSONObject(response);
                                     if (jsonObject.has("name")){
                                         Goal goal = new Goal(
@@ -345,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(String response) {
                                 try {
-                                    System.out.println(response);
                                     JSONObject jsonObject =  new JSONObject(response);
 
                                     JSONArray one_time_tasks = ((JSONArray) jsonObject.get("one_time_tasks"));
@@ -427,7 +432,6 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(String response) {
                                 try {
-                                    System.out.println(response);
                                     JSONObject jsonObject =  new JSONObject(response);
                                     if (jsonObject.getString("error").isEmpty()){
                                         JSONArray checked_tasks = ((JSONArray) jsonObject.get("0"));
