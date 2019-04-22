@@ -346,6 +346,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
             this.state = state;
             this.task_id = task_id;
             this.task = task;
+            System.out.println("state " + state + "task_id " + task_id + "user " + AppData.getCurrentUserID() );
         }
 
         @Override
@@ -353,7 +354,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
             try {
                 StringRequest stringRequest;
                 stringRequest = new StringRequest(Request.Method.POST,
-                        context.getString(R.string.check_on_time_task),
+                        context.getString(R.string.check_one_time_task),
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -376,6 +377,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
                         Map<String, String> params = new HashMap<>();
                         params.put("state", Integer.valueOf(state).toString());
                         params.put("task_id", Integer.valueOf(task_id).toString());
+                        params.put("user_id", Integer.valueOf(AppData.getCurrentUserID()).toString());
                         return params;
                     }
                 };
@@ -439,8 +441,8 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
                         params.put("year", Integer.valueOf(localDate.getYear()).toString());
                         params.put("month", Integer.valueOf(localDate.getMonthValue()).toString());
                         params.put("day", Integer.valueOf(localDate.getDayOfMonth()).toString());
-
-
+                        params.put("user_id", Integer.valueOf(AppData.getCurrentUserID()).toString());
+                        System.out.println("state " + state + " task_id " + task_id + " user_id " + AppData.getCurrentUserID() + " month " + localDate.getDayOfMonth() + " day " + localDate.getDayOfMonth());
                         return params;
                     }
                 };

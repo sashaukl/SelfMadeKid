@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
+    private final String TAG = "MainActivity";
     private GetChildren childDataTask = null;
     private TextView mTextMessage;
     private ChildContainer childContainer;
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppData.setCurrentState(AppData.PARENT);
-
+        Log.d(TAG, "onCreate");
 
 
         this.context = this;

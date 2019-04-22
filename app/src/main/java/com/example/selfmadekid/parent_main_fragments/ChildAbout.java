@@ -2,11 +2,6 @@ package com.example.selfmadekid.parent_main_fragments;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +14,11 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,17 +34,10 @@ import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;
 
-
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.fragment.app.Fragment;
 
 public class ChildAbout extends Fragment {
 
@@ -299,6 +292,7 @@ public class ChildAbout extends Fragment {
                         Map<String, String> params = new HashMap<>();
                         params.put("goal_id", Integer.valueOf(goalID).toString() );
                         params.put("points", Integer.valueOf(finalPoints).toString() );
+                        params.put("child_id", Integer.valueOf(AppData.getCurrentUserID()).toString());
                         return params;
                     }
                 };

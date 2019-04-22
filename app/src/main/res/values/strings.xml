@@ -1,7 +1,7 @@
 <!DOCTYPE resources [
 
-    <!ENTITY host "http://ile1.diac.site">
-    <!ENTITY folder "self_made_kid">
+    <!ENTITY host "http://10.0.2.2">
+    <!ENTITY folder "myselfkid">
     ]>
 
 
@@ -119,21 +119,22 @@
     <string name="add_child_script">&host;/&folder;/add_child.php</string>
     <string name="get_children_script">&host;/&folder;/getchildren.php</string>
     <string name="get_child_data">&host;/&folder;/get_child_data.php</string>
-    <string name="add_goal_script">&host;/&folder;/add_goal.php</string>
+    <string name="add_goal_script">http://10.0.2.2/myselfkid/add_goal.php</string>
     <string name="add_one_time_task">&host;/&folder;/add_one_time_task.php</string>
     <string name="get_goal">&host;/&folder;/get_goal.php</string>
     <string name="get_tasks">&host;/&folder;/get_tasks.php</string>
     <string name="add_repetitive_task">&host;/&folder;/add_repetitive_task.php</string>
     <string name="get_repetitive_id">&host;/&folder;/get_repetitive_id.php</string>
     <string name="update_goal_points">&host;/&folder;/update_goal_points.php</string>
-    <string name="check_on_time_task">&host;/&folder;/check_one_time_task.php</string>
-    <string name="check_repetitive_task">&host;/&folder;/check_repetitive_task.php</string>
+    <string name="check_one_time_task">http://10.0.2.2/myselfkid/check_one_time_task.php</string>
+    <string name="check_repetitive_task">http://10.0.2.2/myselfkid/check_repetitive_task.php</string>
     <string name="get_checked_repetitive_tasks">&host;/&folder;/get_checked_repetitive_tasks.php</string>
-
     <string name="update_token">http://10.0.2.2/myselfkid/update_token.php</string>
-
     <string name="current_goal">Текущая цель</string>
-
     <string name="default_notification_channel_id" translatable="false"> fcm_default_channel</string>
+    <string name="task_confirmed_by_parent">Задача подтверждена родителем</string>
+    <string name="child_finished_task">Ребенок выполнил задачу</string>
+    <string name="child_have_been_adde_goal">Ребенок добавил цель</string>
+    <string name="perent_confirmed_goal">Родитель подтвердил цель</string>
 
 </resources>
