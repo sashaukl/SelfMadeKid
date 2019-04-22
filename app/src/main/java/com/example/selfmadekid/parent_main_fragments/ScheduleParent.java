@@ -1,16 +1,14 @@
 package com.example.selfmadekid.parent_main_fragments;
 
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.selfmadekid.ChildMainActivity;
 import com.example.selfmadekid.MainActivity;
@@ -23,7 +21,6 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.format.MonthArrayTitleFormatter;
-
 
 import org.threeten.bp.LocalDate;
 
@@ -64,6 +61,11 @@ public class ScheduleParent extends Fragment {
         mCalendarView.setTitleFormatter(new MonthArrayTitleFormatter(getResources().getTextArray(R.array.custom_months)));
         final Calendar calendar = Calendar.getInstance();
         Calendar now = Calendar.getInstance();
+
+        if (AppData.getCurrentState() == AppData.CHILD){
+            view.findViewById(R.id.fab).setVisibility(View.GONE);
+        }
+
 
         //only way why its works :(
         CalendarDay today = CalendarDay.today();

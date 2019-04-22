@@ -129,6 +129,9 @@
     <string name="check_on_time_task">&host;/&folder;/check_one_time_task.php</string>
     <string name="check_repetitive_task">&host;/&folder;/check_repetitive_task.php</string>
     <string name="get_checked_repetitive_tasks">&host;/&folder;/get_checked_repetitive_tasks.php</string>
+
+    <string name="update_token">http://10.0.2.2/myselfkid/update_token.php</string>
+
     <string name="current_goal">Текущая цель</string>
 
     <string name="default_notification_channel_id" translatable="false"> fcm_default_channel</string>

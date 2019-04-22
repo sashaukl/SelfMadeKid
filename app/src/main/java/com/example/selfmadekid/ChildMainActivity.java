@@ -4,8 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -14,8 +21,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;
@@ -23,15 +28,9 @@ import com.example.selfmadekid.data.OneTimeTask;
 import com.example.selfmadekid.data.RepetitiveTask;
 import com.example.selfmadekid.parent_main_fragments.ChildAbout;
 import com.example.selfmadekid.parent_main_fragments.ScheduleParent;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -79,6 +78,7 @@ public class ChildMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         this.context = this;
         this.setContentView(R.layout.activity_child_main);
         AppData.setCurrentState(AppData.CHILD);
@@ -92,6 +92,11 @@ public class ChildMainActivity extends AppCompatActivity {
 
         childDataTask = new GetChildren();
         childDataTask.execute();
+
+        AppData.setCirrentUserID(userID);
+        FirebaseApp.initializeApp(this);
+        new UpdateToken().execute();
+
     }
 
 
@@ -395,6 +400,30 @@ public class ChildMainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+
+    private class UpdateToken extends AsyncTask<Void, Void, Boolean> {
+        public UpdateToken() {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+                FirebaseApp.getInstance();
+            }catch (Exception e) {
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
     }
 
     private void makeToast(String str){

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.selfmadekid"
     android:networkSecurityConfig="@xml/network_security_config"
@@ -14,13 +15,13 @@
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
-        tools:node="replace"
-        tools:replace="android:icon,android:label"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        android:usesCleartextTraffic="true"
+        >
 
         <activity
             android:name=".AddNewTaskActivity"
@@ -57,16 +58,12 @@
             >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.firebase.INSTANSE" />
             </intent-filter>
         </service>
 
 
-        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
 
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="default_channel_id"/>
@@ -74,9 +71,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-        <meta-data android:name="android.security.net.config"
-            android:resource="@xml/network_security_config" />
 
     </application>
 

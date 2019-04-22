@@ -9,6 +9,8 @@
     <color name="textPrimaryColor">#291e1c</color>
     <color name="textSecondColor">#fff</color>
 
+    <color name="image_card_background">#f8f8f8</color>
+
     <color name="silverColor">#848d95</color>
 
     <color name="cardBackground">#83FFFFFF</color>

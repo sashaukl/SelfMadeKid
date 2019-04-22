@@ -3,13 +3,9 @@ package com.example.selfmadekid;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -330,6 +328,7 @@ public class LoginActivity extends AppCompatActivity  {
                                             makeToast(jsonObject.get("error").toString());
                                         }
                                     } catch (Exception e){
+                                        System.out.println("______ not");
                                         e.printStackTrace();
                                     }
 
@@ -366,12 +365,14 @@ public class LoginActivity extends AppCompatActivity  {
                 if (roleID == SelectRoleActivity.PARENT_ROLE){
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("id", loginID);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                 }
                 if (roleID == SelectRoleActivity.CHILD_ROLE){
                     Intent intent = new Intent(context, ChildMainActivity.class);
                     intent.putExtra("id", loginID);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                 }

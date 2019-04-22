@@ -1,13 +1,18 @@
 package com.example.selfmadekid;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -16,13 +21,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;
@@ -31,23 +29,14 @@ import com.example.selfmadekid.data.RepetitiveTask;
 import com.example.selfmadekid.parent_main_fragments.ChildAbout;
 import com.example.selfmadekid.parent_main_fragments.ChildSelect;
 import com.example.selfmadekid.parent_main_fragments.ScheduleParent;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
-
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -96,23 +85,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppData.setCurrentState(AppData.PARENT);
+
+
+
         this.context = this;
         this.setContentView(R.layout.activity_main);
         Locale locale = new Locale("RU");
         Locale.setDefault(locale);
         userID = getIntent().getIntExtra("id", -1);
+        AppData.setCirrentUserID(userID);
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         loadFragment(ChildSelect.newInstance());
+
         childDataTask = new GetChildren();
         childDataTask.execute((Void) null);
-
-
+        FirebaseApp.initializeApp(this);
+        new UpdateToken().execute();
     }
 
 
     private void loadFragment(Fragment fragment) {
+
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.main_activity_frame_layout, fragment);
         ft.commit();
@@ -213,10 +209,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            preLoad(lastNavigationItemSelected);
         }
 
         @Override
         protected void onCancelled() {
+            System.out.println("");
         }
 
 
@@ -470,11 +468,34 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    private class UpdateToken extends AsyncTask<Void, Void, Boolean> {
+        public UpdateToken() {
+        }
 
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+                FirebaseApp.getInstance();
+            }catch (Exception e) {
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
 
 
 
     private void makeToast(String str){
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
     }
+
+
 }

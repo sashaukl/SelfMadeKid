@@ -32,10 +32,6 @@ public class SelectRoleActivity extends AppCompatActivity implements TabParent.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.role_select_activity);
 
-        FirebaseApp.initializeApp(this);
-        //String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        //Log.d("Token", "Token: " + refreshedToken);
-
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new
                     StrictMode.ThreadPolicy.Builder().permitAll().build();
