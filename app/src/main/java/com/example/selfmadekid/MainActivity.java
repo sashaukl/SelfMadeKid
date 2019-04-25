@@ -240,8 +240,8 @@ public class MainActivity extends AppCompatActivity {
                                             childID,
                                             jsonObject.get("name").toString(),
                                             jsonObject.get("surname").toString(),
-                                            jsonObject.get("patronymic").toString()
-                                            //Goal //todo -- make goal
+                                            jsonObject.get("patronymic").toString(),
+                                            jsonObject.getInt("points_have")
 
                                     );
 
@@ -251,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
                                     if (goalID != 0){
                                         getGoal(goalID, childID);
                                     }
+                                    getFinishedGoals(childID);
                                     preLoad(lastNavigationItemSelected);
                                 } catch (Exception e){
                                     e.printStackTrace();
@@ -324,6 +325,48 @@ public class MainActivity extends AppCompatActivity {
             }
             return;
         }
+
+
+        protected void getFinishedGoals(final int child_id ){
+            try {
+                StringRequest stringRequest;
+                ChildContainer childContainer;
+                stringRequest = new StringRequest(Request.Method.POST,
+                        getString(R.string.get_finished_goals),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONArray jsonArray= new JSONArray(response);
+                                    for (int i = 0; i<jsonArray.length(); i++){
+                                        AppData.getChildren().get(child_id).getFinishedGoals().add(jsonArray.get(i).toString());
+                                    }
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("child_id", Integer.valueOf(child_id).toString() );
+                        return params;
+                    }
+                };
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                requestQueue.add(stringRequest);
+            }catch (Exception e) {
+            }
+            return;
+        }
+
+
     }
 
     public void forceLoadingFragment(){

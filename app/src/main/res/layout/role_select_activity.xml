@@ -19,7 +19,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabIndicatorColor="@color/colorAccent"
-        app:tabIndicatorFullWidth="false">
+        app:tabIndicatorFullWidth="true"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabMaxWidth="0dp"
+        >
 
     </com.google.android.material.tabs.TabLayout>
 

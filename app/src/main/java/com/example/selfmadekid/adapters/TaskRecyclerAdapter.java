@@ -4,6 +4,7 @@ package com.example.selfmadekid.adapters;
 import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,7 +128,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
                                     @Override
                                     public void onClick(View v) {
                                         ((Animatable) ((ImageButton) v).getDrawable()).start();
-                                        new CheckRepetitiveTask(AppData.getCurrentState(), childTask.getTask_id(), localDate).execute();
+                                        new CheckRepetitiveTask(AppData.getCurrentState(), childTask.getTask_id(), localDate, childTask.getFinishReward()).execute();
                                     }
                                 });
                             }
@@ -146,7 +147,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
                                     @Override
                                     public void onClick(View v) {
                                         ((Animatable) ((ImageButton) v).getDrawable()).start();
-                                        new CheckRepetitiveTask(AppData.getCurrentState(), childTask.getTask_id(), localDate).execute();
+                                        new CheckRepetitiveTask(AppData.getCurrentState(), childTask.getTask_id(), localDate, childTask.getFinishReward()).execute();
                                     }
                                 });
                             }
@@ -338,15 +339,17 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
 
     public class CheckOneTimeTask extends AsyncTask<Void, Void, Boolean> {
 
+        private final String TAG = "CheckOneTimeTask";
+
         int state;
         int task_id;
         OneTimeTask task;
+
 
         public CheckOneTimeTask(int state, int task_id, OneTimeTask task) {
             this.state = state;
             this.task_id = task_id;
             this.task = task;
-            System.out.println("state " + state + "task_id " + task_id + "user " + AppData.getCurrentUserID() );
         }
 
         @Override
@@ -358,6 +361,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
+                                Log.d(TAG, response);
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
                                     if (jsonObject.get("error").equals("")){
@@ -392,6 +396,12 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
         protected void onPostExecute(final Boolean success) {
             task.setConfirmed(state);
 
+            if(state == AppData.PARENT){
+                if ( AppData.getChildren().get(selectedChildId).getCurrentGoal().addPoints( task.getFinishReward() ) ){
+                    AppData.getChildren().get(selectedChildId).setCurrentGoal(null);
+                }
+            }
+
         }
 
         @Override
@@ -401,15 +411,17 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     }
 
     public class CheckRepetitiveTask extends AsyncTask<Void, Void, Boolean> {
-
+        private static final String TAG = "CheckRepetitiveTask";
         int state;
         int task_id;
         LocalDate localDate;
+        int finishPoints;
 
-        public CheckRepetitiveTask(int state, int task_id, LocalDate localDate) {
+        public CheckRepetitiveTask(int state, int task_id, LocalDate localDate, int finishPoints) {
             this.state = state;
             this.task_id = task_id;
             this.localDate = localDate;
+            this.finishPoints = finishPoints;
         }
 
         @Override
@@ -421,7 +433,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                System.out.println(response);
+                                Log.d(TAG, response);
                                 try {
                                     onPostExecute(true);
                                 } catch (Exception e){
@@ -442,7 +454,6 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
                         params.put("month", Integer.valueOf(localDate.getMonthValue()).toString());
                         params.put("day", Integer.valueOf(localDate.getDayOfMonth()).toString());
                         params.put("user_id", Integer.valueOf(AppData.getCurrentUserID()).toString());
-                        System.out.println("state " + state + " task_id " + task_id + " user_id " + AppData.getCurrentUserID() + " month " + localDate.getDayOfMonth() + " day " + localDate.getDayOfMonth());
                         return params;
                     }
                 };
@@ -456,6 +467,12 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success){
+                if(state == AppData.PARENT){
+                    if ( AppData.getChildren().get(selectedChildId).getCurrentGoal().addPoints(finishPoints) ){
+                        AppData.getChildren().get(selectedChildId).setCurrentGoal(null);
+                        return;
+                    }
+                }
                 AppData.getChildren().get(selectedChildId).getCurrentGoal().getCheckedDates().get(task_id).put(localDate,
                         state);
             }

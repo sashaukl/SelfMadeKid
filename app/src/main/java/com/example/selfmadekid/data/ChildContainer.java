@@ -1,7 +1,6 @@
 package com.example.selfmadekid.data;
 
-import android.util.SparseArray;
-
+import java.util.ArrayList;
 
 
 public class ChildContainer {
@@ -9,9 +8,9 @@ public class ChildContainer {
     private String name;
     private String surname;
     private String patronymic;
-    private int goalID=0;
     private Goal currentGoal;
-    private SparseArray<Goal> finishedGoals = new SparseArray<Goal>();
+    private int points = 0;
+    private ArrayList<String> finishedGoals = new ArrayList<>();
 
 
 
@@ -22,15 +21,24 @@ public class ChildContainer {
         this.patronymic = patronymic;
     }
 
+    public ChildContainer(int id, String name, String surname, String patronymic, int points) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.points = points;
+    }
+
     public ChildContainer(int id, String name, String surname, String patronymic, Goal currentGoal) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
         this.currentGoal = currentGoal;
+
     }
 
-    public ChildContainer(int id, String name, String surname, String patronymic, Goal currentGoal, SparseArray<Goal> finishedGoals) {
+    public ChildContainer(int id, String name, String surname, String patronymic, Goal currentGoal,  ArrayList<String> finishedGoals) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -62,5 +70,17 @@ public class ChildContainer {
 
     public void setCurrentGoal(Goal currentGoal) {
         this.currentGoal = currentGoal;
+    }
+
+    public ArrayList<String> getFinishedGoals() {
+        return finishedGoals;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void addPoints(int points) {
+        this.points+=points;
     }
 }

@@ -87,6 +87,14 @@ public class Goal {
         this.currentPoints = currentPoints;
     }
 
+    public boolean addPoints(int addPoints) {
+        this.currentPoints += addPoints;
+        if (currentPoints != 0 && currentPoints >= finishPoints){
+            return true;
+        }
+        return false;
+    }
+
     public int getFinishPoints() {
         return finishPoints;
     }
@@ -107,4 +115,6 @@ public class Goal {
     public boolean isConfirmed() {
         return isConfirmed;
     }
+
+
 }

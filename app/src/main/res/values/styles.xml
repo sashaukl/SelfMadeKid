@@ -19,8 +19,14 @@
         <item name="android:statusBarColor">@color/colorPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
-    <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
+    <style name="CustomTextAppearance" parent="android:Widget.ProgressBar">
 
     </style>
+
+    <style name="MyProgressBar" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:minHeight">10dip</item>
+        <item name="android:maxHeight">35dip</item>
+    </style>
+
 
 </resources>

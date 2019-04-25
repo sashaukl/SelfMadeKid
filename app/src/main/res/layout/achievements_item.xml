@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="false"
+    app:cardElevation="2dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginTop="5dp"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/child_item_text"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/open_sans_light"
+            android:gravity="center|start"
+            android:maxLines="2"
+            android:textColor="@color/textPrimaryColor"
+            android:textSize="30sp"
+            app:autoSizeMaxTextSize="35sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

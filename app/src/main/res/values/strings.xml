@@ -5,6 +5,7 @@
     ]>
 
 
+
 <resources>
     <string name="app_name">SelfMadeKid</string>
     <string name="child_select">Выбор ребенка</string>
@@ -33,9 +34,9 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_sign_up_short">Sign up</string>
 
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_invalid_email">Неправильный Email адресс</string>
+    <string name="error_invalid_password">Пароль слишком короткий</string>
+    <string name="error_incorrect_password">Неверный пароль</string>
     <string name="error_field_required">Это обязательное поле</string>
     <string name="passwords_must_be_the_same">Пароли не совпадают</string>
     <!--logic in TaskRecyclerAdapter-->
@@ -119,22 +120,43 @@
     <string name="add_child_script">&host;/&folder;/add_child.php</string>
     <string name="get_children_script">&host;/&folder;/getchildren.php</string>
     <string name="get_child_data">&host;/&folder;/get_child_data.php</string>
-    <string name="add_goal_script">http://10.0.2.2/myselfkid/add_goal.php</string>
+    <string name="add_goal_script">&host;/&folder;/add_goal.php</string>
     <string name="add_one_time_task">&host;/&folder;/add_one_time_task.php</string>
     <string name="get_goal">&host;/&folder;/get_goal.php</string>
     <string name="get_tasks">&host;/&folder;/get_tasks.php</string>
     <string name="add_repetitive_task">&host;/&folder;/add_repetitive_task.php</string>
     <string name="get_repetitive_id">&host;/&folder;/get_repetitive_id.php</string>
     <string name="update_goal_points">&host;/&folder;/update_goal_points.php</string>
-    <string name="check_one_time_task">http://10.0.2.2/myselfkid/check_one_time_task.php</string>
-    <string name="check_repetitive_task">http://10.0.2.2/myselfkid/check_repetitive_task.php</string>
+    <string name="check_one_time_task">&host;/&folder;/check_one_time_task.php</string>
+    <string name="check_repetitive_task">&host;/&folder;/check_repetitive_task.php</string>
     <string name="get_checked_repetitive_tasks">&host;/&folder;/get_checked_repetitive_tasks.php</string>
-    <string name="update_token">http://10.0.2.2/myselfkid/update_token.php</string>
+    <string name="update_token">&host;/&folder;/update_token.php</string>
+    <string name="remove_goal">&host;/&folder;/remove_goal.php</string>
+    <string name="get_finished_goals">&host;/&folder;/get_finished_goals.php</string>
+    <string name="send_tokens">&host;/&folder;/send_tokens.php</string>
+    <string name="send_money_to_friend">&host;/&folder;/send_money_to_friend.php</string>
+
     <string name="current_goal">Текущая цель</string>
     <string name="default_notification_channel_id" translatable="false"> fcm_default_channel</string>
     <string name="task_confirmed_by_parent">Задача подтверждена родителем</string>
     <string name="child_finished_task">Ребенок выполнил задачу</string>
     <string name="child_have_been_adde_goal">Ребенок добавил цель</string>
-    <string name="perent_confirmed_goal">Родитель подтвердил цель</string>
+    <string name="parent_confirmed_goal">Родитель подтвердил цель</string>
+    <string name="achievements">Достижения</string>
+    <string name="points_name">Селфики</string>
+    <string name="points_name_on_count">Селфиков</string>
+    <string name="about_child">О ребенке</string>
+    <string name="goal_label">Цель</string>
+    <string name="encourage_with_money">Поощрить селфиками</string>
+    <string name="amount">Количество</string>
+    <string name="send_selfies_label">Введите количество селфиков </string>
+    <string name="share_money">Поделиться селфиками</string>
+    <string name="receiver_email">Email получателя</string>
+    <string name="not_enouth_money">У вас недостаточно селфиков</string>
+    <string name="no_such_user">Такого пользователья не существует</string>
+    <string name="create_goal">Создайте цель</string>
+    <string name="confirm_task_action">Подтвердите цель</string>
+    <string name="not_confirmed">Не подтверждена</string>
+    <string name="not_created">Не создана</string>
 
 </resources>
