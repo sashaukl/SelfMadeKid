@@ -135,6 +135,8 @@
     <string name="get_finished_goals">&host;/&folder;/get_finished_goals.php</string>
     <string name="send_tokens">&host;/&folder;/send_tokens.php</string>
     <string name="send_money_to_friend">&host;/&folder;/send_money_to_friend.php</string>
+    <string name="add_exist_child">&host;/&folder;/add_exist_child.php</string>
+
 
     <string name="current_goal">Текущая цель</string>
     <string name="default_notification_channel_id" translatable="false"> fcm_default_channel</string>
@@ -158,5 +160,8 @@
     <string name="confirm_task_action">Подтвердите цель</string>
     <string name="not_confirmed">Не подтверждена</string>
     <string name="not_created">Не создана</string>
+    <string name="child_already_registered">Ребенок уже зарегистрирован</string>
+    <string name="new_child_registration">Регистрация новго ребенка</string>
+
 
 </resources>

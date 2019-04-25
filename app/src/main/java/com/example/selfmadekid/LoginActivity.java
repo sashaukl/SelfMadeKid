@@ -28,6 +28,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.selfmadekid.data.AppData;
+import com.example.selfmadekid.services.ReceiveChildDataService;
 
 import org.json.JSONObject;
 
@@ -191,7 +193,7 @@ public class LoginActivity extends AppCompatActivity  {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
+            //showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
@@ -269,6 +271,8 @@ public class LoginActivity extends AppCompatActivity  {
         private final String mEmail;
         private final String mPassword;
 
+        private boolean isOK = false;
+
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -288,7 +292,7 @@ public class LoginActivity extends AppCompatActivity  {
                                         JSONObject jsonObject = new JSONObject(response);
                                         if (jsonObject.get("error").equals("")){
                                             loginID = Integer.valueOf(jsonObject.get("id").toString());
-                                            onPostExecute(true);
+                                           isOK = true;
                                         }else{
                                             makeToast(jsonObject.get("error").toString());
                                         }
@@ -328,7 +332,6 @@ public class LoginActivity extends AppCompatActivity  {
                                             makeToast(jsonObject.get("error").toString());
                                         }
                                     } catch (Exception e){
-                                        System.out.println("______ not");
                                         e.printStackTrace();
                                     }
 
@@ -355,27 +358,35 @@ public class LoginActivity extends AppCompatActivity  {
 
             }
 
-            return false;
+            return isOK;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            showProgress(false);
             if (success) {
+                showProgress(true);
                 if (roleID == SelectRoleActivity.PARENT_ROLE){
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.putExtra("id", loginID);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
+                    //Intent intent = new Intent(context, MainActivity.class);
+                    //intent.putExtra("id", loginID);
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //startActivity(intent);
+                    mProgressView.setVisibility(View.VISIBLE);
+                    Intent intent = new Intent(context, ReceiveChildDataService.class);
+                    intent.putExtra("role", AppData.PARENT);
+                    intent.putExtra("userID", loginID);
+                    startService(intent);
+
+                    //finish();
                 }
                 if (roleID == SelectRoleActivity.CHILD_ROLE){
-                    Intent intent = new Intent(context, ChildMainActivity.class);
-                    intent.putExtra("id", loginID);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
+                    Intent intent = new Intent(context, ReceiveChildDataService.class);
+                    intent.putExtra("role", AppData.CHILD);
+                    intent.putExtra("userID", loginID);
+                    startService(intent);
                 }
+            }
+            else{
+                showProgress(false);
             }
             onCancelled();
         }
@@ -383,7 +394,7 @@ public class LoginActivity extends AppCompatActivity  {
         @Override
         protected void onCancelled() {
             mAuthTask = null;
-            showProgress(false);
+            //showProgress(false);
         }
     }
 

@@ -44,6 +44,7 @@
             android:theme="@style/Theme.Design.NoActionBar"/>
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
@@ -59,6 +60,9 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
+        </service>
+        <service android:name=".services.ReceiveChildDataService"
+            android:stopWithTask="true">
         </service>
 
 
