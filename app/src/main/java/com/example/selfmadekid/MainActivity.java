@@ -17,9 +17,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
-import com.example.selfmadekid.parent_main_fragments.ChildAbout;
-import com.example.selfmadekid.parent_main_fragments.ChildSelect;
-import com.example.selfmadekid.parent_main_fragments.ScheduleParent;
+import com.example.selfmadekid.main_fragments.ChildAbout;
+import com.example.selfmadekid.main_fragments.ChildSelect;
+import com.example.selfmadekid.main_fragments.Schedule;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private ChildContainer childContainer;
     private int selectedChildID = -1;
     private int userID = -1;
-    public int lastNavigationItemSelected = R.id.navigation_home;
+    public static int lastNavigationItemSelected = R.id.navigation_home;
     Context context;
     View mainContainer;
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(ChildAbout.newInstance());
                 return true;
             case R.id.child_schedule:
-                loadFragment(ScheduleParent.newInstance());
+                loadFragment(Schedule.newInstance());
                 return true;
         }
         return false;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         Locale locale = new Locale("RU");
         Locale.setDefault(locale);
         userID = getIntent().getIntExtra("id", -1);
-        AppData.setCirrentUserID(userID);
+        AppData.setCurrentUserID(userID);
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("parent_id", userID);
         startActivity(intent);
     }
-
 
     public int getSelectedChildID() {
         return selectedChildID;

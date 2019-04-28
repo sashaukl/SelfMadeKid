@@ -1,7 +1,8 @@
-package com.example.selfmadekid.parent_main_fragments;
+package com.example.selfmadekid.main_fragments;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -36,10 +37,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.selfmadekid.ChildMainActivity;
 import com.example.selfmadekid.MainActivity;
 import com.example.selfmadekid.R;
+import com.example.selfmadekid.SelectRoleActivity;
 import com.example.selfmadekid.adapters.AchievementAdapter;
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
 import com.example.selfmadekid.data.Goal;
+import com.example.selfmadekid.services.ReceiveChildDataService;
 
 import org.json.JSONObject;
 
@@ -68,6 +71,8 @@ public class ChildAbout extends Fragment {
     private TextView checkGoalHint;
     private TextView achievementsCountText;
     private int returnedNewGoalID = -1;
+    private ImageButton mExitButton;
+    private ImageButton mUpdateButton;
 
     public ChildAbout() {
         // Required empty public constructor
@@ -208,6 +213,7 @@ public class ChildAbout extends Fragment {
                 } else {
                     goalCheckButton.setVisibility(View.VISIBLE);
                     checkGoalHint.setText(getString(R.string.not_confirmed));
+                    goalCheckButton.setImageDrawable(getContext().getDrawable(R.drawable.ic_empty_center_circle));
                     if (getActivity() instanceof MainActivity){
                         Log.d("NO GOAL", "MainActivity");
                         checkGoalHint.setText(getString(R.string.confirm_task_action));
@@ -239,6 +245,30 @@ public class ChildAbout extends Fragment {
                 }
             }
         }
+
+        mExitButton = view.findViewById(R.id.exit_button);
+        mExitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppData.clearData(getContext());
+                Intent intent = new Intent(getContext(), SelectRoleActivity.class);
+                getContext().startActivity(intent);
+                getActivity().finish();
+            }
+        });
+
+        mUpdateButton = view.findViewById(R.id.update_button);
+        mUpdateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((Animatable) mUpdateButton.getDrawable()).start();
+                Intent intent = new Intent(getContext(), ReceiveChildDataService.class);
+                intent.putExtra("role", AppData.getCurrentState());
+                AppData.setCurrentUserID(AppData.getCurrentUserID());
+                intent.putExtra("userID", AppData.getCurrentUserID());
+                getActivity().startService(intent);
+            }
+        });
 
         RecyclerView achievements_recycler =  view.findViewById(R.id.achievements_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

@@ -7,76 +7,93 @@
     android:background="@color/backgroundColor"
     tools:context=".SelectRoleActivity">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout_select_role"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:minHeight="?attr/actionBarSize"
-        android:popupTheme="@style/Theme.AppCompat.Light"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleLarge"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/colorAccent"
-        app:tabIndicatorFullWidth="true"
-        app:tabGravity="fill"
-        app:tabMode="fixed"
-        app:tabMaxWidth="0dp"
-        >
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <Toolbar
-        android:id="@+id/select_role_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/backgroundColor"
-
-        android:popupTheme="@style/Theme.AppCompat.Light"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-
-        android:contentInsetLeft="0dp"
-        android:contentInsetStart="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        android:contentInsetRight="0dp"
-        android:contentInsetEnd="0dp"
-        app:contentInsetRight="0dp"
-        app:contentInsetEnd="0dp"
-
-        app:layout_constraintTop_toBottomOf="@id/tab_layout_select_role"
-        app:layout_constraintBottom_toBottomOf="@id/line1_login_select_parent_or_child_activity"
-        >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/enter_text"
-            android:textAlignment="center"
-            app:autoSizeTextType="uniform"
-            android:textColor="@color/textPrimaryColor"
-
-
-            />
-
-    </Toolbar>
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/line1_login_select_parent_or_child_activity"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.18" />
+        android:visibility="gone"
+        android:indeterminateTint="@color/colorAccent"/>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager_select_role"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/line1_login_select_parent_or_child_activity">
+        android:layout_height="match_parent">
 
-    </androidx.viewpager.widget.ViewPager>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout_select_role"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:minHeight="?attr/actionBarSize"
+            android:popupTheme="@style/Theme.AppCompat.Light"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabIndicatorFullWidth="true"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabMaxWidth="0dp"
+            >
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <Toolbar
+            android:id="@+id/select_role_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/backgroundColor"
+
+            android:popupTheme="@style/Theme.AppCompat.Light"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
+            android:contentInsetLeft="0dp"
+            android:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            android:contentInsetRight="0dp"
+            android:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetEnd="0dp"
+
+            app:layout_constraintTop_toBottomOf="@id/tab_layout_select_role"
+            app:layout_constraintBottom_toBottomOf="@id/line1_login_select_parent_or_child_activity"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/enter_text"
+                android:textAlignment="center"
+                app:autoSizeTextType="uniform"
+                android:textColor="@color/textPrimaryColor"
+
+
+                />
+
+        </Toolbar>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/line1_login_select_parent_or_child_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.18" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/pager_select_role"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@id/line1_login_select_parent_or_child_activity">
+
+        </androidx.viewpager.widget.ViewPager>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

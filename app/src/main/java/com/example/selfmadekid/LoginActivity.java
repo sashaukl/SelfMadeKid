@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity  {
         fadeOut.setFillAfter(true);
         fadeOut.setAnimationListener(textChangeAnimation);
         roleID = getIntent().getIntExtra("role_name", -1);
-        if (roleID == SelectRoleActivity.CHILD_ROLE){
+        if (roleID == AppData.CHILD){
             mBottomLoginOrRegButton.setVisibility(View.GONE);
         }
 
@@ -365,7 +365,7 @@ public class LoginActivity extends AppCompatActivity  {
         protected void onPostExecute(final Boolean success) {
             if (success) {
                 showProgress(true);
-                if (roleID == SelectRoleActivity.PARENT_ROLE){
+                if (roleID == AppData.PARENT){
                     //Intent intent = new Intent(context, MainActivity.class);
                     //intent.putExtra("id", loginID);
                     //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -373,14 +373,17 @@ public class LoginActivity extends AppCompatActivity  {
                     mProgressView.setVisibility(View.VISIBLE);
                     Intent intent = new Intent(context, ReceiveChildDataService.class);
                     intent.putExtra("role", AppData.PARENT);
+                    AppData.setCurrentState(AppData.PARENT);
+                    AppData.setCurrentUserID(loginID);
                     intent.putExtra("userID", loginID);
-                    startService(intent);
 
+                    startService(intent);
                     //finish();
-                }
-                if (roleID == SelectRoleActivity.CHILD_ROLE){
+                }else if (roleID == AppData.CHILD){
                     Intent intent = new Intent(context, ReceiveChildDataService.class);
                     intent.putExtra("role", AppData.CHILD);
+                    AppData.setCurrentState(AppData.CHILD);
+                    AppData.setCurrentUserID(loginID);
                     intent.putExtra("userID", loginID);
                     startService(intent);
                 }

@@ -27,22 +27,29 @@ import org.json.JSONObject;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-
 
 
 public class ReceiveChildDataService extends Service {
 
     final String LOG_TAG = "ReceiveChildDataService";
-
-    private int selectedChildID = -1;
     private Context context;
     private int userID;
     private Class activityToStart;
     private boolean startActivity;
-
+    private boolean isHasGoal = false;
     private boolean hasChild = false;
+    private JSONArray childJsonArray;
+    private JSONObject childJsonObject;
+    private JSONObject goalJsonObject;
+    private JSONObject tasksJsonObject;
+    private JSONArray finishedGoals;
+    private JSONObject repetitiveJsonObject;
+    private RequestQueue requestQueue;
+    private final int timeToUpdate = 1000 * 20;
+
 
     public void onCreate() {
         super.onCreate();
@@ -54,15 +61,29 @@ public class ReceiveChildDataService extends Service {
         Log.d(LOG_TAG, "onStartCommand");
         startActivity = intent.getBooleanExtra("start_new_activity", true);
         userID = intent.getIntExtra("userID", -1);
+
+
         if (intent.getIntExtra("role", AppData.PARENT) == AppData.PARENT){
             activityToStart = MainActivity.class;
-            getChildren();
+            if ( Calendar.getInstance().getTimeInMillis() - AppData.getLastUpdate() > timeToUpdate ) {
+                getChildren();
+            }else{
+                try{
+                    Thread.sleep(490);
+                }catch (Exception e){}
+                startActivity(true);
+            }
         }else if (intent.getIntExtra("role", AppData.PARENT) == AppData.CHILD){
             activityToStart = ChildMainActivity.class;
-            getChild(userID);
+            if ( Calendar.getInstance().getTimeInMillis() - AppData.getLastUpdate() > timeToUpdate ) {
+                getChild(userID);
+            }else{
+                try{
+                    Thread.sleep(490);
+                }catch (Exception e){}
+                startActivity(true);
+            }
         }
-
-
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -86,11 +107,8 @@ public class ReceiveChildDataService extends Service {
                         @Override
                         public void onResponse(String response) {
                             try {
-                                JSONArray jsonArray = new JSONArray(response);
-                                for (int i=0; i<jsonArray.length(); i++){
-                                    hasChild = true;
-                                    getChild(jsonArray.getInt(i));
-                                }
+                                Log.d("getChildren", response);
+                                childJsonArray = new JSONArray(response);
                             } catch (Exception e){
                                 e.printStackTrace();
                             }
@@ -107,14 +125,24 @@ public class ReceiveChildDataService extends Service {
                     return params;
                 }
             };
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            requestQueue = Volley.newRequestQueue(context);
             requestQueue.add(stringRequest);
             requestQueue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
                 @Override
                 public void onRequestFinished(Request<Object> request) {
+                    try {
+                        if (childJsonArray != null){
+                            for (int i = 0; i < childJsonArray.length(); i++) {
+                                hasChild = true;
+                                getChild(childJsonArray.getInt(i));
+                            }
+                            Log.d("getChildren", "ended");
+                        }
+                    }catch (Exception e){ }
                     startActivity(!hasChild);
                 }
             });
+            requestQueue.getCache().clear();
         }catch (Exception e) {
         }
     }
@@ -129,34 +157,31 @@ public class ReceiveChildDataService extends Service {
                         @Override
                         public void onResponse(String response) {
                             try {
-                                Log.d("getChild", response);
-                                JSONObject jsonObject = new JSONObject(response);
-                                if (selectedChildID == -1){
-                                    selectedChildID = childID;
+                                Log.d("getChild", "start");
+                                childJsonObject = new JSONObject(response);
+
+                                if (childJsonObject != null){
+                                    ChildContainer cContainer = new ChildContainer(
+                                            childID,
+                                            childJsonObject.get("name").toString(),
+                                            childJsonObject.get("surname").toString(),
+                                            childJsonObject.get("patronymic").toString(),
+                                            childJsonObject.getInt("points_have")
+                                    );
+
+                                    AppData.getChildren().append(childID, cContainer);
+                                    int goalID = childJsonObject.getInt("current_goal_id");
+                                    if (goalID != 0){
+                                        getGoal(goalID, childID);
+                                        isHasGoal = true;
+                                    }
+                                    getFinishedGoals(childID);
                                 }
 
-
-                                ChildContainer cContainer = new ChildContainer(
-                                        childID,
-                                        jsonObject.get("name").toString(),
-                                        jsonObject.get("surname").toString(),
-                                        jsonObject.get("patronymic").toString(),
-                                        jsonObject.getInt("points_have")
-
-                                );
-
-                                AppData.getChildren().append(childID, cContainer);
-
-                                int goalID = jsonObject.getInt("current_goal_id");
-                                if (goalID != 0){
-                                    getGoal(goalID, childID);
-                                }
-                                getFinishedGoals(childID);
 
                             } catch (Exception e){
                                 e.printStackTrace();
                             }
-
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -171,19 +196,22 @@ public class ReceiveChildDataService extends Service {
                     return params;
                 }
             };
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+            requestQueue = Volley.newRequestQueue(context);
             requestQueue.add(stringRequest);
             requestQueue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
                 @Override
                 public void onRequestFinished(Request<Object> request) {
-                    startActivity(true);
+                    try {
+                    }catch (Exception e){
+                        startActivity(!isHasGoal);
+                    }
                 }
             });
         }catch (Exception e) {
         }
         return null;
     }
-
 
     protected void getGoal(final int goal_id, final int child_id ){
         try {
@@ -194,18 +222,9 @@ public class ReceiveChildDataService extends Service {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            Log.d("getGoal", "start");
                             try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                if (jsonObject.has("name")){
-                                    Goal goal = new Goal(
-                                            jsonObject.getString("name"),
-                                            jsonObject.getInt("current_points"),
-                                            jsonObject.getInt("finish_points"),
-                                            goal_id
-                                    );
-                                    AppData.getChildren().get(child_id).setCurrentGoal(goal);
-                                    getTasks(goal_id, child_id);
-                                }
+                                goalJsonObject = new JSONObject(response);
                             } catch (Exception e){
                                 e.printStackTrace();
                             }
@@ -214,7 +233,6 @@ public class ReceiveChildDataService extends Service {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
                 }
             }){
                 @Override
@@ -224,19 +242,35 @@ public class ReceiveChildDataService extends Service {
                     return params;
                 }
             };
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            requestQueue = Volley.newRequestQueue(context);
+            stringRequest.setTag("update");
             requestQueue.add(stringRequest);
             requestQueue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
                 @Override
                 public void onRequestFinished(Request<Object> request) {
-                    startActivity(!hasChild);
+                    try{
+                        if (goalJsonObject != null){
+                            if (goalJsonObject.has("name")) {
+                                Goal goal = new Goal(
+                                        goalJsonObject.getString("name"),
+                                        goalJsonObject.getInt("current_points"),
+                                        goalJsonObject.getInt("finish_points"),
+                                        goal_id
+                                );
+                                AppData.getChildren().get(child_id).setCurrentGoal(goal);
+                                getTasks(goal_id, child_id);
+                            }
+                        }
+                    }catch (Exception e){
+                    }
+                    startActivity(true);
                 }
             });
+            requestQueue.getCache().clear();
         }catch (Exception e) {
         }
         return;
     }
-
 
     protected void getFinishedGoals(final int child_id ){
         try {
@@ -247,11 +281,9 @@ public class ReceiveChildDataService extends Service {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            Log.d("getFinishedGoals", "start");
                             try {
-                                JSONArray jsonArray= new JSONArray(response);
-                                for (int i = 0; i<jsonArray.length(); i++){
-                                    AppData.getChildren().get(child_id).getFinishedGoals().add(jsonArray.get(i).toString());
-                                }
+                                finishedGoals = new JSONArray(response);
                             } catch (Exception e){
                                 e.printStackTrace();
                             }
@@ -271,14 +303,29 @@ public class ReceiveChildDataService extends Service {
                     return params;
                 }
             };
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            requestQueue = Volley.newRequestQueue(context);
+            stringRequest.setTag("update");
             requestQueue.add(stringRequest);
+            requestQueue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
+                @Override
+                public void onRequestFinished(Request<Object> request) {
+                    Log.d("getFinishedGoals", "ended");
+                    try {
+                        if (finishedGoals != null){
+                            for (int i = 0; i<finishedGoals.length(); i++){
+                                AppData.getChildren().get(child_id).getFinishedGoals().add(finishedGoals.get(i).toString());
+                            }
+                        }
+                    }catch (Exception e){
+
+                    }
+                }
+            });
+            requestQueue.getCache().clear();
         }catch (Exception e) {
         }
         return;
     }
-
-
 
     public void getTasks(final int goalID, final int childID)  {
         try {
@@ -289,46 +336,8 @@ public class ReceiveChildDataService extends Service {
                         @Override
                         public void onResponse(String response) {
                             try {
-                                JSONObject jsonObject =  new JSONObject(response);
-
-                                JSONArray one_time_tasks = ((JSONArray) jsonObject.get("one_time_tasks"));
-
-                                for (int i=0; i<one_time_tasks.length();i++){
-                                    JSONObject row = new JSONObject(one_time_tasks.get(i).toString());
-                                    AppData.getChildren().get(childID).getCurrentGoal().getOneTimeTaskContainer().add(new OneTimeTask(
-                                            row.getInt("task_id"),
-                                            row.getString("name"),
-                                            //no to millis usage :(
-                                            LocalDate.of(
-                                                    row.getInt("year_end"),
-                                                    row.getInt("month_end"),
-                                                    row.getInt("day_end")
-                                            ),
-                                            row.getInt("hour_end"),
-                                            row.getInt("minute_end"),
-                                            row.getInt("value"),
-                                            row.getInt("finished")
-                                    ));
-                                }
-
-                                JSONArray reprtitive_tasks  = ((JSONArray) jsonObject.get("repetitive_tasks"));
-                                for (int i=0; i<reprtitive_tasks.length();i++){
-                                    JSONObject row = new JSONObject(reprtitive_tasks.get(i).toString());
-                                    AppData.getChildren().get(childID).getCurrentGoal().getDayOfTheWeekContainer(DayOfWeek.of(row.getInt("day"))).add(
-                                            new RepetitiveTask(
-                                                    row.getInt("task_id"),
-                                                    row.getString("name"),
-                                                    row.getInt("value"),
-                                                    row.getInt("hour"),
-                                                    row.getInt("minute")
-                                            )
-                                    );
-                                    addRepetitiveCheckedTasks(row.getInt("task_id"), childID);
-
-                                }
-
-
-
+                                Log.d("getTasks", "start");
+                                tasksJsonObject =  new JSONObject(response);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -345,8 +354,59 @@ public class ReceiveChildDataService extends Service {
                     return params;
                 }
             };
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            requestQueue = Volley.newRequestQueue(getApplicationContext());
+            stringRequest.setTag("update");
             requestQueue.add(stringRequest);
+            requestQueue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
+                @Override
+                public void onRequestFinished(Request<Object> request) {
+                    Log.d("getTasks", "ended");
+                    try {
+                        if (tasksJsonObject != null){
+                            JSONArray one_time_tasks = ((JSONArray) tasksJsonObject.get("one_time_tasks"));
+
+                            for (int i=0; i<one_time_tasks.length();i++){
+                                JSONObject row = new JSONObject(one_time_tasks.get(i).toString());
+                                AppData.getChildren().get(childID).getCurrentGoal().getOneTimeTaskContainer().add(new OneTimeTask(
+                                        row.getInt("task_id"),
+                                        row.getString("name"),
+                                        //no to millis usage :(
+                                        LocalDate.of(
+                                                row.getInt("year_end"),
+                                                row.getInt("month_end"),
+                                                row.getInt("day_end")
+                                        ),
+                                        row.getInt("hour_end"),
+                                        row.getInt("minute_end"),
+                                        row.getInt("value"),
+                                        row.getInt("finished")
+                                ));
+                            }
+
+                            JSONArray reprtitive_tasks = ((JSONArray) tasksJsonObject.get("repetitive_tasks"));
+                            for (int i=0; i<reprtitive_tasks.length();i++){
+                                JSONObject row = new JSONObject(reprtitive_tasks.get(i).toString());
+                                AppData.getChildren().get(childID).getCurrentGoal().getDayOfTheWeekContainer(DayOfWeek.of(row.getInt("day"))).add(
+                                        new RepetitiveTask(
+                                                row.getInt("task_id"),
+                                                row.getString("name"),
+                                                row.getInt("value"),
+                                                row.getInt("hour"),
+                                                row.getInt("minute")
+                                        )
+                                );
+                                addRepetitiveCheckedTasks(row.getInt("task_id"), childID);
+                            }
+
+                        }
+                    }catch (Exception e){
+
+                    }
+
+
+                }
+            });
+            requestQueue.getCache().clear();
         } catch (Exception e) {
         }
         //return false;
@@ -362,17 +422,8 @@ public class ReceiveChildDataService extends Service {
                         @Override
                         public void onResponse(String response) {
                             try {
-                                JSONObject jsonObject =  new JSONObject(response);
-                                if (jsonObject.getString("error").isEmpty()){
-                                    JSONArray checked_tasks = ((JSONArray) jsonObject.get("0"));
-                                    for (int i=0; i<checked_tasks.length();i++){
-                                        JSONObject row = new JSONObject(checked_tasks.get(i).toString());
-                                        AppData.getChildren().get(childID).getCurrentGoal().getCheckedDates().get(task_id).put(LocalDate.of(
-                                                row.getInt("year"),
-                                                row.getInt("month"),
-                                                row.getInt("day")),row.getInt("finished"));
-                                    }
-                                }
+                                Log.d("addRepetitiveCheckedTasks", "start");
+                                repetitiveJsonObject =  new JSONObject(response);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -389,20 +440,49 @@ public class ReceiveChildDataService extends Service {
                     return params;
                 }
             };
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            requestQueue = Volley.newRequestQueue(context);
+            stringRequest.setTag("update");
             requestQueue.add(stringRequest);
+            requestQueue.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
+                @Override
+                public void onRequestFinished(Request<Object> request) {
+                    Log.d("addRepetitiveCheckedTasks", "ended");
+                    try {
+                        if (repetitiveJsonObject != null){
+                            if (repetitiveJsonObject.getString("error").isEmpty()){
+                                JSONArray checked_tasks = ((JSONArray) repetitiveJsonObject.get("0"));
+                                for (int i=0; i<checked_tasks.length();i++){
+                                    JSONObject row = new JSONObject(checked_tasks.get(i).toString());
+                                    AppData.getChildren().get(childID).getCurrentGoal().getCheckedDates().get(task_id).put(LocalDate.of(
+                                            row.getInt("year"),
+                                            row.getInt("month"),
+                                            row.getInt("day")),row.getInt("finished"));
+                                }
+                            }
+                        }
+                    } catch (Exception e){
+
+                    }
+                }
+            });
+            requestQueue.getCache().clear();
+
         } catch (Exception e) {
         }
     }
 
     private void startActivity(boolean bool){
         if (bool && startActivity){
+            AppData.setLastUpdate(Calendar.getInstance().getTimeInMillis());
+            AppData.writeData(context);
+            AppData.setLoaded(true);
             Intent tmpIntent = new Intent(context, activityToStart);
             tmpIntent.putExtra("id", userID);
-            tmpIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |  Intent.FLAG_ACTIVITY_SINGLE_TOP |  Intent.FLAG_ACTIVITY_NEW_TASK);
+            tmpIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP |  Intent.FLAG_ACTIVITY_NEW_TASK);
+            Log.d("startActivity", "started");
             startActivity(tmpIntent);
+            stopSelf();
         }
     }
-
 
 }

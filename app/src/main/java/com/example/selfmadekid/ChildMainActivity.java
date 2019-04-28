@@ -16,8 +16,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.selfmadekid.data.AppData;
 import com.example.selfmadekid.data.ChildContainer;
-import com.example.selfmadekid.parent_main_fragments.ChildAbout;
-import com.example.selfmadekid.parent_main_fragments.ScheduleParent;
+import com.example.selfmadekid.main_fragments.ChildAbout;
+import com.example.selfmadekid.main_fragments.Schedule;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -47,7 +47,7 @@ public class ChildMainActivity extends AppCompatActivity {
                 loadFragment(ChildAbout.newInstance());
                 return true;
             case R.id.child_schedule:
-                loadFragment(ScheduleParent.newInstance());
+                loadFragment(Schedule.newInstance());
                 return true;
         }
         return false;
@@ -71,9 +71,7 @@ public class ChildMainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         loadFragment(ChildAbout.newInstance());
-
-
-        AppData.setCirrentUserID(userID);
+        AppData.setCurrentUserID(userID);
         FirebaseApp.initializeApp(this);
         new UpdateToken().execute();
 

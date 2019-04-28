@@ -1,4 +1,4 @@
-package com.example.selfmadekid.parent_main_fragments;
+package com.example.selfmadekid.main_fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,14 +27,14 @@ import org.threeten.bp.LocalDate;
 import java.util.Calendar;
 
 
-public class ScheduleParent extends Fragment {
+public class Schedule extends Fragment {
 
     private RecyclerView recyclerView;
     private TaskRecyclerAdapter adapter;
 
     private MaterialCalendarView mCalendarView;
     private ChildContainer childContainer;
-    public ScheduleParent() {
+    public Schedule() {
         // Required empty public constructor
     }
 
@@ -45,8 +45,8 @@ public class ScheduleParent extends Fragment {
     }
 
 
-    public static ScheduleParent newInstance() {
-        return new ScheduleParent();
+    public static Schedule newInstance() {
+        return new Schedule();
     }
 
     @Override
